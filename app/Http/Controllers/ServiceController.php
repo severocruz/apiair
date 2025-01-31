@@ -62,11 +62,14 @@ class ServiceController extends Controller
             ]);
 
             if ($validator->fails()) {
+            //     Log::error('Error al validar el servicio: ',
+            // (array)$validator->errors());
                 return response()->json(
                     ['message' => 'Error en la validación de datos',
                             'errors' => $validator->errors(),
                            'status'  => '400'], 
                     400);
+                    
             }
             $service = Service::create($request->all());
             return response()->json(
@@ -85,21 +88,6 @@ class ServiceController extends Controller
                     500);
             }
 
-
-     
-
-        
-
-        $service = Service::create($request->all());
-
-        if(!$service){
-            return response()->json(
-                ['message' => 'Error al registrar el servicio',
-                       'status'    => '500'], 
-                500);
-        }
-
-        return response()->json($service, 201);
     }
 
     /**
@@ -137,6 +125,40 @@ class ServiceController extends Controller
     public function update(UpdateserviceRequest $request, service $service)
     {
         //
+        try{
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255|min:3',
+            ]);
+
+            if ($validator->fails()) {
+            //     Log::error('Error al validar el servicio: ',
+            // (array)$validator->errors());
+            $data = ['message' => 'Error en la validación de datos',
+            'errors' => $validator->errors(),
+           'status'  => '400'];
+                return response()->json(
+                    $data, 
+                    400);
+                    
+            }
+            $service->update($request->all());
+            $data = ['data'=>$service,
+            'status'    => true,
+            'message' => 'Servicio actualizado'];
+            return response()->json(
+                $data,
+               200);
+            }catch (Exception $e) {
+                
+                Log::error('Error al actualizar el servicio: '.$e->getMessage(),
+            ['trace' => $e->getTraceAsString()]);
+            $data=[ 'data'=>null,
+                    'message' => 'Error al actualizar el servicio',
+                    'status'   => false];
+                return response()->json(
+                    $data, 
+                    500);
+            }	
     }
 
     /**

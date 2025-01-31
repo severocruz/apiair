@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::get('/servicios', 'index');
         Route::get('/servicios/{id}', 'show');
         Route::post('/servicios', 'store');
+        
     });
 
 });

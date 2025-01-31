@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreserviceRequest;
 use App\Http\Requests\UpdateserviceRequest;
 use App\Models\Service;
+use Exception;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+
 
 class ServiceController extends Controller
 {
@@ -14,16 +17,30 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $servicios = Service::all();
-        if($servicios->isEmpty()){
+        try {
+            $services = Service::all();
+            if($services->isEmpty()){
+                return response()->json(
+                    [
+                            'data'=>[],
+                            'message' => 'No hay servicios registrados',
+                           'status'    => false], 
+                    200);
+    
+            }
             return response()->json(
-                ['message' => 'No hay servicios registrados',
-                       'status'    => '404'], 
-                200);
-
+                ['data'=>$services,
+                       'status'    => true,
+                       'message' => 'Servicios encontrados'],
+               200);
+        } catch (Exception $e) {
+            Log::error('Error al obtener los servicios: '.$e->getMessage());
+            return response()->json(
+                [ 'data'=>[],
+                        'message' => 'Error al obtener los servicios',
+                       'status'   => false], 
+                500);
         }
-
-        return response()->json($servicios,200);
     }
 
     /**
@@ -39,17 +56,39 @@ class ServiceController extends Controller
      */
     public function store(StoreserviceRequest $request)
     {
-     $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-        ]);
+        try{
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255|min:3',
+            ]);
 
-        if ($validator->fails()) {
+            if ($validator->fails()) {
+                return response()->json(
+                    ['message' => 'Error en la validación de datos',
+                            'errors' => $validator->errors(),
+                           'status'  => '400'], 
+                    400);
+            }
+            $service = Service::create($request->all());
             return response()->json(
-                ['message' => 'Error en la validación de datos',
-                        'errors' => $validator->errors(),
-                       'status'    => '400'], 
-                400);
-        }
+                ['data'=>$service,
+                       'status'    => true,
+                       'message' => 'Servicio registrado'],
+               201);
+            }catch (Exception $e) {
+                
+                Log::error('Error al registrar el servicio: '.$e->getMessage(),
+            ['trace' => $e->getTraceAsString()]);
+                return response()->json(
+                    [ 'data'=>null,
+                            'message' => 'Error al registrar el servicio',
+                           'status'   => false], 
+                    500);
+            }
+
+
+     
+
+        
 
         $service = Service::create($request->all());
 

@@ -30,7 +30,8 @@ class User extends Authenticatable
         'verified',
         'document_number',
         'document_type',
-        'document_photo',
+        'document_photo_front',
+        'document_photo_back',
         'status'
     ];
 

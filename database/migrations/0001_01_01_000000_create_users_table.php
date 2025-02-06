@@ -25,7 +25,8 @@ return new class extends Migration
             $table->boolean('verified')->default(false);
             $table->string('document_number')->nullable();
             $table->string('document_type')->nullable();
-            $table->longText('document_photo')->nullable();
+            $table->longText('document_photo_front')->nullable();
+            $table->longText('document_photo_back')->nullable();
             $table->boolean('status')->default(true);
             $table->rememberToken();
             $table->timestamps();

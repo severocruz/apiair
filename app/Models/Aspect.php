@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Description extends Model
+class Aspect extends Model
 {
-    //
+    //descripciones del alojamiento dependiendo de la categoria p ej Casa, Habitacion
     use HasFactory;
     protected $fillable =[
         'description',

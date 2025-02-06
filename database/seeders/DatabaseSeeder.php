@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
                  DescribeSeeder::class,
                  ServiceTypeSeeder::class,
                  ServiceSeeder::class,
-                 DescriptionSeeder::class
+                 AspectSeeder::class
             ]
             );
     }

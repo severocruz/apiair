@@ -13,6 +13,7 @@ class Accommodation extends Model
     'title',
     'description',
     'type_id',
+    'describe_id',
     'address',
     'city',
     'postal_code',
@@ -26,4 +27,13 @@ class Accommodation extends Model
     'status'
     ];
     //
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'host_id');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(AccommodationType::class, 'type_id');
+    }
 }

@@ -16,5 +16,15 @@ class AccommodationService extends Model
         'status'
     ];
 
+    public function accommodation()
+    {
+        return $this->belongsTo(Accommodation::class, 'accommodation_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
+
     //
 }

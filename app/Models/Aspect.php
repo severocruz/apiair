@@ -14,4 +14,8 @@ class Aspect extends Model
         'describe_id',
         'status'
     ];
+    public function describe()
+    {
+        return $this->belongsTo(Describe::class,'describe_id');
+    }
 }

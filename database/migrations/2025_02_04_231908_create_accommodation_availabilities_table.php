@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('accommodation_availabilities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('accommodation_id')->constrained()->cascadeOnDelete();
-            $table->date('date');
+            $table->date('start_date');
+            $table->date('end_date')->nullable();
             $table->unsignedInteger('availability');
             $table->boolean('status')->default(true);
             $table->timestamps();

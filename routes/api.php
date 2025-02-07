@@ -10,6 +10,11 @@ use App\Http\Controllers\Accommodation\AccommodationServiceController;
 use App\Http\Controllers\Accommodation\AccommodationAspectController;
 use App\Http\Controllers\Accommodation\AccommodationRulesController;
 use App\Http\Controllers\Accommodation\AccommodationInstructionController;
+use App\Http\Controllers\Accommodation\AccommodationDescriptionController;
+use App\Http\Controllers\Accommodation\AccommodationPriceController;
+use App\Http\Controllers\Accommodation\AccommodationAmenityController;
+use App\Http\Controllers\Accommodation\AccommodationAvailabilityController;
+use App\Http\Controllers\Accommodation\AccommodationPhotoController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
@@ -74,6 +79,47 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::put('/{accommodationInstruction}', 'update');
         Route::delete('/{id}', 'delete');
     });
+
+    Route::controller(AccommodationDescriptionController::class)->prefix('accommodation_descriptions')->group(function(){
+        Route::get('', 'index');
+        Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
+        Route::post('', 'store');
+        Route::put('/{accommodationDescription}', 'update');
+        Route::delete('/{id}', 'delete');
+    });
+
+    Route::controller(AccommodationPriceController::class)->prefix('accommodation_prices')->group(function(){
+        Route::get('', 'index');
+        Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
+        Route::post('', 'store');
+        Route::put('/{accommodationPrice}', 'update');
+        Route::delete('/{id}', 'delete');
+    });
+
+    Route::controller(AccommodationAmenityController::class)->prefix('accommodation_amenities')->group(function(){
+        Route::get('', 'index');
+        Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
+        Route::post('', 'store');
+        Route::put('/{accommodationAmenity}', 'update');
+        Route::delete('/{id}', 'delete');
+    });
+
+    Route::controller(AccommodationAvailabilityController::class)->prefix('accommodation_availabilities')->group(function(){
+        Route::get('', 'index');
+        Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
+        Route::post('', 'store');
+        Route::put('/{accommodationAvailability}', 'update');
+        Route::delete('/{id}', 'delete');
+    });
+
+    Route::controller(AccommodationPhotoController::class)->prefix('accommodation_photos')->group(function(){
+        Route::get('', 'index');
+        Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
+        Route::post('', 'store');
+        Route::put('/{accommodationPhoto}', 'update');
+        Route::delete('/{id}', 'delete');
+    });
+
 
 });
 

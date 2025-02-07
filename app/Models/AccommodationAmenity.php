@@ -15,4 +15,8 @@ class AccommodationAmenity extends Model
         'description',
         'status'
     ];
+    public function accommodation()
+    {
+        return $this->belongsTo(Accommodation::class, 'accommodation_id');
+    }
 }

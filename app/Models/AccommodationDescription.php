@@ -16,4 +16,9 @@ class AccommodationDescription extends Model
         'status'
         
     ];
+
+    public function accommodation()
+    {
+        return $this->belongsTo(Accommodation::class, 'accommodation_id');
+    }
 }

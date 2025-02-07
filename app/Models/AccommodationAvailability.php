@@ -11,8 +11,14 @@ class AccommodationAvailability extends Model
     //
     protected $fillable = [
         'accommodation_id',
-        'date',
+        'start_date',
+        'end_date',
         'availability',
         'status',
     ];
+
+    public function accommodation()
+    {
+        return $this->belongsTo(Accommodation::class, 'accommodation_id');
+    }
 }

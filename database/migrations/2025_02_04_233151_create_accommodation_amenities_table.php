@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('accommodation_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

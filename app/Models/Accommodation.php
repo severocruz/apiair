@@ -23,6 +23,7 @@ class Accommodation extends Model
     'guest_capacity',
     'number_rooms',
     'number_bathrooms',
+    'number_beds',
     'price_night',
     'status'
     ];

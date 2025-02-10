@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('guest_capacity')->nullable();
             $table->integer('number_rooms')->nullable();
             $table->integer('number_bathrooms')->nullable();
+            $table->integer('number_beds')->nullable();
             $table->decimal('price_night', 8, 2)->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();

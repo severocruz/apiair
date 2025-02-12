@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\Models\AccommodationPhoto;
+use Illuminate\Support\Facades\Storage;
 
 class AccommodationPhotoController extends Controller
 {
@@ -65,7 +66,7 @@ class AccommodationPhotoController extends Controller
             return response()->json(
                 ['data'=>$accommodationPhoto,
                        'status'    => true,
-                       'message' => 'descripcion registrada'],
+                       'message' => 'Foto registrada'],
                201);
             }catch (Exception $e) {
                 
@@ -105,7 +106,7 @@ class AccommodationPhotoController extends Controller
             $accommodationPhotoUpdated = $accommodationPhoto->update($request->all());
             $data = ['data'=>$accommodationPhotoUpdated,
             'status'    => true,
-            'message' => 'descripción actualizada'];
+            'message' => 'Foto actualizada'];
             return response()->json(
                 $data,
                200);
@@ -114,7 +115,58 @@ class AccommodationPhotoController extends Controller
                 Log::error('Error al actualizar la foto: '.$e->getMessage(),
             ['trace' => $e->getTraceAsString()]);
             $data=[ 'data'=>null,
-                    'message' => 'Error al actualizar la descripción',
+                    'message' => 'Error al actualizar la foto',
+                    'status'   => false];
+                return response()->json(
+                    $data, 
+                    500);
+            }	
+    }
+
+    public function upload(Request $request)
+    {
+        //
+        try{
+            $validator = Validator::make($request->all(), [
+                'accommodation_id' => 'required',
+                'mainPhoto' => 'required|boolean',
+                'order'=>'required|numeric',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            ]);
+
+            if ($validator->fails()) {
+            //     Log::error('Error al validar el foto: ',
+            // (array)$validator->errors());
+            $data = ['message' => 'Error en la validación de datos',
+            'errors' => $validator->errors(),
+           'status'  => '400'];
+                return response()->json(
+                    $data, 
+                    400);
+                    
+            }
+            $photo = $request->file('image');
+            $photoName = date('Ymd').time().'.'.$photo->extension();
+            $photo->move(public_path('images/accommodations'), $photoName);
+             //Storage::putFileAs('public/images/accommodations',$photo,$photoName);
+            $accommodationPhoto = new AccommodationPhoto();
+            $accommodationPhoto->accommodation_id = $request->accommodation_id;
+            $accommodationPhoto->photo_url = $photoName;
+            $accommodationPhoto->mainPhoto = $request->mainPhoto;
+            $accommodationPhoto->order = $request->order;
+            $accommodationPhotoCreated = AccommodationPhoto::create($accommodationPhoto->toArray());
+            $data = ['data'=>$accommodationPhotoCreated,
+            'status'    => true,
+            'message' => 'foto creada'];
+            return response()->json(
+                $data,
+               200);
+            }catch (Exception $e) {
+                
+                Log::error('Error al crear la foto: '.$e->getMessage(),
+            ['trace' => $e->getTraceAsString()]);
+            $data=[ 'data'=>null,
+                    'message' => 'Error al crear la foto',
                     'status'   => false];
                 return response()->json(
                     $data, 

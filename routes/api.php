@@ -116,6 +116,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::get('', 'index');
         Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
         Route::post('', 'store');
+        Route::post('/upload', 'upload');
         Route::put('/{accommodationPhoto}', 'update');
         Route::delete('/{id}', 'delete');
     });

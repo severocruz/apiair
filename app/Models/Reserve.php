@@ -21,4 +21,13 @@ class Reserve extends Model
         'state',
         'status'
     ];
+    public function accommodation()
+    {
+        return $this->belongsTo(Accommodation::class, 'accommodation_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

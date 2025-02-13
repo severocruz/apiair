@@ -55,7 +55,7 @@ class AccommodationAspectController extends Controller
                 return response()->json(
                     ['message' => 'Error en la validación de datos',
                             'errors' => $validator->errors(),
-                           'status'  => '400'], 
+                           'status'  => false], 
                     400);
                     
             }
@@ -92,7 +92,7 @@ class AccommodationAspectController extends Controller
             // (array)$validator->errors());
             $data = ['message' => 'Error en la validación de datos',
             'errors' => $validator->errors(),
-           'status'  => '400'];
+           'status'  => false];
                 return response()->json(
                     $data, 
                     400);
@@ -168,7 +168,7 @@ class AccommodationAspectController extends Controller
             if (!$accommodationAspectUpdated) {
             $data = ['message' => 'No se pudo eliminar',
             'errors' => [],
-           'status'  => '400'];
+           'status'  => false];
                 return response()->json(
                     $data, 
                     400);

@@ -54,7 +54,7 @@ class AccommodationController extends Controller
                 return response()->json(
                     ['message' => 'Error en la validación de datos',
                             'errors' => $validator->errors(),
-                           'status'  => '400'], 
+                           'status'  => false], 
                     400);
                     
             }

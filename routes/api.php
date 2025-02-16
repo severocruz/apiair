@@ -43,6 +43,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::controller(AccommodationController::class)->prefix('accommodations')->group(function(){
         Route::get('', 'index');
         Route::get('/{id}', 'show');
+        Route::get('/{userId}/user', 'showByUserId');
         Route::post('', 'store');
         Route::put('/{accommodation}', 'update');
         Route::delete('/{id}', 'delete');

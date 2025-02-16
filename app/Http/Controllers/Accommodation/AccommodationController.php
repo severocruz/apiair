@@ -147,6 +147,35 @@ class AccommodationController extends Controller
         }
 
     }
+    public function showByUserId($userId)
+    {
+        try {
+            // with(relations: ['user','type'])
+             $accommodations = Accommodation::where('status','=','true')
+            ->where('host_id','=',$userId)->get();
+            if($accommodations->isEmpty()){
+                return response()->json(
+                    [
+                            'data'=>[],
+                            'message' => 'No tienes alojamientos registrados',
+                           'status'    => false], 
+                    200);
+    
+            }
+            return response()->json(
+                ['data'=>$accommodations,
+                       'status'    => true,
+                       'message' => 'Alojamientos encontrados'],
+               200);
+        } catch (Exception $e) {
+            Log::error('Error al obtener los alojamientos: '.$e->getMessage());
+            return response()->json(
+                [ 'data'=>[],
+                        'message' => 'Error al obtener los alojamientos',
+                       'status'   => false], 
+                500);
+        }
+    }
 
     public function delete( $id)
     {

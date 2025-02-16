@@ -78,6 +78,7 @@ class AuthController extends Controller
             $user = User::where('email', $request->email)->firstOrFail();
             $token = $user->createToken('auth_token')->plainTextToken;
             $response = new stdClass();
+            $response->id = $user->id;
             $response->token = $token;
             $response->name = $user->name;
             $response->email = $user->email;
@@ -86,7 +87,7 @@ class AuthController extends Controller
                 ['data'=>$response,
                        'status'    => true,
                        'message' => 'Usuario Autorizado'],
-               201);
+               200);
         }
         
         return response()->json(

@@ -2,6 +2,7 @@
 
 
 // use Illuminate\Http\Request;
+use App\Http\Controllers\Accommodation\DescribeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\Auth\AuthController;
@@ -122,6 +123,9 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::delete('/{id}', 'delete');
     });
 
+    Route::controller(DescribeController::class)->prefix('describes')->group(function(){
+        Route::get('', 'index');
+    });
 
 });
 

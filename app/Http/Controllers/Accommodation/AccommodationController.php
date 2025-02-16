@@ -63,7 +63,7 @@ class AccommodationController extends Controller
                 ['data'=>$accommodation,
                        'status'    => true,
                        'message' => 'Alojamiento registrado'],
-               201);
+               200);
             }catch (Exception $e) {
                 
                 Log::error('Error al registrar el Alojamiento: '.$e->getMessage(),

@@ -16,6 +16,7 @@ use App\Http\Controllers\Accommodation\AccommodationPriceController;
 use App\Http\Controllers\Accommodation\AccommodationAmenityController;
 use App\Http\Controllers\Accommodation\AccommodationAvailabilityController;
 use App\Http\Controllers\Accommodation\AccommodationPhotoController;
+use App\Http\Controllers\Accommodation\AccommodationTypeController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
@@ -124,6 +125,9 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     });
 
     Route::controller(DescribeController::class)->prefix('describes')->group(function(){
+        Route::get('', 'index');
+    });
+    Route::controller(AccommodationTypeController::class)->prefix('accommodation_types')->group(function(){
         Route::get('', 'index');
     });
 

@@ -124,7 +124,7 @@ class AccommodationController extends Controller
             if(!$accommodation){
                 return response()->json(
                     [
-                            'data'=>[],
+                            'data'=>json_decode('{}') ,
                             'message' => 'No existe este alojamiento',
                            'status'    => false], 
                     200);

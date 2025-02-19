@@ -36,9 +36,9 @@ Route::controller(AuthController::class)
 
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::controller(ServiceController::class)->group(function () {
-        Route::get('/servicios', 'index');
-        Route::get('/servicios/{id}', 'show');
-        Route::post('/servicios', 'store');
+        Route::get('/services', 'index');
+        Route::get('/services/{id}', 'show');
+        Route::post('/services', 'store');
         
     });
 

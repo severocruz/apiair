@@ -56,7 +56,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
         Route::post('', 'store');
         Route::put('/{accommodationService}', 'update');
-        Route::delete('/{id}', 'delete');
+        Route::delete('/{accommodationId}/{serviceId}', 'delete');
     });
 
     Route::controller(AccommodationAspectController::class)->prefix('accommodation_aspects')->group(function(){

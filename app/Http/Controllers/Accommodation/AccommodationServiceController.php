@@ -45,8 +45,7 @@ class AccommodationServiceController extends Controller
         try{
             $validator = Validator::make($request->all(), [
                 'accommodation_id' => 'required',
-                'service_id' => 'required',
-                'description'=>''
+                'service_id' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -64,7 +63,7 @@ class AccommodationServiceController extends Controller
                 ['data'=>$accommodationService,
                        'status'    => true,
                        'message' => 'Servicios registrado'],
-               201);
+               200);
             }catch (Exception $e) {
                 
                 Log::error('Error al registrar el Servicios: '.$e->getMessage(),
@@ -122,8 +121,8 @@ class AccommodationServiceController extends Controller
     {
         //
         try {
-            $accommodationServices = AccommodationService::with(['accommodation','service'])
-                                    ->where('accommodation_id','=',$accommodationId)
+            $accommodationServices = AccommodationService::where('accommodation_id','=',$accommodationId)
+                                                         ->where('status','=',true)
                                     ->get();
             if($accommodationServices->isEmpty()){
                 return response()->json(
@@ -152,19 +151,17 @@ class AccommodationServiceController extends Controller
 
     }
 
-    public function delete( $id)
+    public function delete( $accommodationId,$serviceId)
     {
         //
         
         try{
-            $accommodationService = AccommodationService::find($id);
-            if($accommodationService)
-            {
-             $accommodationServiceUpdated = $accommodationService->update(['status'=>0]);
-            }else{
-                $accommodationServiceUpdated = false;
-            }
-
+            $accommodationService = AccommodationService:: where('accommodation_id',"=",$accommodationId )
+                                                        ->where('service_id',"=",$serviceId )->first();
+            $accommodationService
+            ?$accommodationServiceUpdated = $accommodationService->delete()
+            : $accommodationServiceUpdated = false;
+            
             if (!$accommodationServiceUpdated) {
             $data = ['message' => 'No se pudo eliminar',
             'errors' => [],
@@ -174,7 +171,7 @@ class AccommodationServiceController extends Controller
                     400);
                     
             }
-            $data = ['data'=>$accommodationServiceUpdated,
+            $data = ['data'=>$accommodationService,
             'status'    => true,
             'message' => 'Servicio eliminado'];
             return response()->json(

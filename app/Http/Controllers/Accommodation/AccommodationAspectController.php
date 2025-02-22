@@ -64,7 +64,7 @@ class AccommodationAspectController extends Controller
                 ['data'=>$accommodationAspect,
                        'status'    => true,
                        'message' => 'Aspectos registrado'],
-               201);
+               200);
             }catch (Exception $e) {
                 
                 Log::error('Error al registrar el Aspectos: '.$e->getMessage(),
@@ -152,29 +152,33 @@ class AccommodationAspectController extends Controller
 
     }
 
-    public function delete( $id)
+    public function delete( $accommodationId,$aspectId)
     {
         //
         
         try{
-            $accommodationAspect = AccommodationAspect::find($id);
+            // $accommodationAspect = AccommodationAspect::find($id);
+            $accommodationAspect = AccommodationAspect::where('accommodation_id',"=",$accommodationId ) 
+                                                      ->where('aspect_id',"=",$aspectId )->first() ;
             if($accommodationAspect)
             {
-             $accommodationAspectUpdated = $accommodationAspect->update(['status'=>0]);
+             $accommodationAspectUpdated = $accommodationAspect->delete();
             }else{
                 $accommodationAspectUpdated = false;
             }
 
             if (!$accommodationAspectUpdated) {
-            $data = ['message' => 'No se pudo eliminar',
+            $data = [
+            'message' => 'No se pudo eliminar',
             'errors' => [],
-           'status'  => false];
+            'status'  => false];
                 return response()->json(
                     $data, 
                     400);
                     
             }
-            $data = ['data'=>$accommodationAspectUpdated,
+            $data = [
+            'data'=>$accommodationAspect,
             'status'    => true,
             'message' => 'Aspecto eliminado'];
             return response()->json(

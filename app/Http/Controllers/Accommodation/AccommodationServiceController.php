@@ -156,7 +156,7 @@ class AccommodationServiceController extends Controller
         //
         
         try{
-            $accommodationService = AccommodationService:: where('accommodation_id',"=",$accommodationId )
+            $accommodationService = AccommodationService::where('accommodation_id',"=",$accommodationId )
                                                         ->where('service_id',"=",$serviceId )->first();
             $accommodationService
             ?$accommodationServiceUpdated = $accommodationService->delete()

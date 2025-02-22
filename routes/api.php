@@ -17,6 +17,7 @@ use App\Http\Controllers\Accommodation\AccommodationAmenityController;
 use App\Http\Controllers\Accommodation\AccommodationAvailabilityController;
 use App\Http\Controllers\Accommodation\AccommodationPhotoController;
 use App\Http\Controllers\Accommodation\AccommodationTypeController;
+use App\Http\Controllers\AspectController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
@@ -64,7 +65,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
         Route::post('', 'store');
         Route::put('/{accommodationAspect}', 'update');
-        Route::delete('/{id}', 'delete');
+        Route::delete('/{accommodationId}/{aspectId}', 'delete');
     });
 
     Route::controller(AccommodationRulesController::class)->prefix('accommodation_rules')->group(function(){
@@ -126,6 +127,10 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
 
     Route::controller(DescribeController::class)->prefix('describes')->group(function(){
         Route::get('', 'index');
+    });
+    Route::controller(AspectController::class)->prefix('aspects')->group(function(){
+        Route::get('', 'index');
+        Route::get('/{describeId}/describe', 'showByDescribeId');
     });
     Route::controller(AccommodationTypeController::class)->prefix('accommodation_types')->group(function(){
         Route::get('', 'index');

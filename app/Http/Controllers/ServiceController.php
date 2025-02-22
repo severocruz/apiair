@@ -18,7 +18,7 @@ class ServiceController extends Controller
     public function index()
     {
         try {
-            $services = Service::all();
+            $services = Service::where('status','=',true)->get();
             if($services->isEmpty()){
                 return response()->json(
                     [

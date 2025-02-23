@@ -17,6 +17,7 @@ use App\Http\Controllers\Accommodation\AccommodationAmenityController;
 use App\Http\Controllers\Accommodation\AccommodationAvailabilityController;
 use App\Http\Controllers\Accommodation\AccommodationPhotoController;
 use App\Http\Controllers\Accommodation\AccommodationTypeController;
+use App\Http\Controllers\Accommodation\AccommodationDiscountController;
 use App\Http\Controllers\AspectController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -99,6 +100,14 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::put('/{accommodationPrice}', 'update');
         Route::delete('/{id}', 'delete');
     });
+
+    Route::controller(AccommodationDiscountController::class)->prefix('accommodation_discounts')->group(function(){
+        Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
+        Route::post('', 'store');
+        Route::put('/{accommodationPrice}', 'update');
+        Route::delete('/{id}', 'delete');
+    });
+
 
     Route::controller(AccommodationAmenityController::class)->prefix('accommodation_amenities')->group(function(){
         Route::get('', 'index');

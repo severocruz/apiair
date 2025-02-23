@@ -7,53 +7,20 @@ use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use App\Models\AccommodationPrice;
-
-class AccommodationPriceController extends Controller
+use App\Models\AccommodationDiscount;
+class AccommodationDiscountController extends Controller
 {
     //
-    public function index()
-    {
-        try {
-            $accommodationPrices = AccommodationPrice::with(relations: ['accommodation'])
-            ->where('status','=','true')->get();
-            if($accommodationPrices->isEmpty()){
-                return response()->json(
-                    [
-                            'data'=>[],
-                            'message' => 'No hay precios registrados',
-                           'status'    => false], 
-                    200);
-    
-            }
-            return response()->json(
-                ['data'=>$accommodationPrices,
-                       'status'    => true,
-                       'message' => 'precios encontrados'],
-               200);
-        } catch (Exception $e) {
-            Log::error('Error al obtener los precios: '.$e->getMessage());
-            return response()->json(
-                [ 'data'=>[],
-                        'message' => 'Error al obtener los precios',
-                       'status'   => false], 
-                500);
-        }
-    }
-
     public function store(Request $request)
     {
         try{
             $validator = Validator::make($request->all(), [
                 'accommodation_id' => 'required',
-                'price_night'=>'required|numeric|regex:/^[\d]{0,11}(\.[\d]{1,2})?$/',
-                'price_weekend'=>'required|numeric|regex:/^[\d]{0,11}(\.[\d]{1,2})?$/',
-                'type'=>'required|string|min:3'
+                
             ]);
 
             if ($validator->fails()) {
-            //     Log::error('Error al validar el precio: ',
-            // (array)$validator->errors());
+            
                 return response()->json(
                     ['message' => 'Error en la validación de datos',
                             'errors' => $validator->errors(),
@@ -61,7 +28,7 @@ class AccommodationPriceController extends Controller
                     400);
                     
             }
-            $accommodationPrice = AccommodationPrice::create($request->all());
+            $accommodationPrice = AccommodationDiscount::create($request->all());
             return response()->json(
                 ['data'=>$accommodationPrice,
                        'status'    => true,
@@ -69,23 +36,23 @@ class AccommodationPriceController extends Controller
                200);
             }catch (Exception $e) {
                 
-                Log::error('Error al registrar la precio: '.$e->getMessage(),
+                Log::error('Error al registrar la descuento: '.$e->getMessage(),
             ['trace' => $e->getTraceAsString()]);
                 return response()->json(
                     [ 'data'=>null,
-                            'message' => 'Error al registrar el precios',
+                            'message' => 'Error al registrar el descuento',
                            'status'   => false], 
                     500);
             }
 
     }
 
-    public function update(Request $request, AccommodationPrice $accommodationPrice)
+    public function update(Request $request, AccommodationDiscount $accommodationPrice)
     {
         //
         try{
             $validator = Validator::make($request->all(), [
-                // 'accommodation_id' => '',
+                //'accommodation_id' => '',
                 // 'price_night'=>'numeric|regex:/^[\d]{0,11}(\.[\d]{1,2})?$/',
                 // 'price_weekend'=>'numeric|regex:/^[\d]{0,11}(\.[\d]{1,2})?$/',
                 // 'type'=>'string|min:3'
@@ -105,35 +72,33 @@ class AccommodationPriceController extends Controller
             $accommodationPriceUpdated = $accommodationPrice->update($request->all());
             $data = ['data'=>$accommodationPriceUpdated,
             'status'    => true,
-            'message' => 'descripción actualizada'];
+            'message' => 'descuento actualizado'];
             return response()->json(
                 $data,
                200);
             }catch (Exception $e) {
                 
-                Log::error('Error al actualizar la precio: '.$e->getMessage(),
+                Log::error('Error al actualizar la descuento: '.$e->getMessage(),
             ['trace' => $e->getTraceAsString()]);
             $data=[ 'data'=>null,
-                    'message' => 'Error al actualizar la descripción',
+                    'message' => 'Error al actualizar la descuento',
                     'status'   => false];
                 return response()->json(
                     $data, 
                     500);
             }	
     }
-
     public function showByAccommodation ($accommodationId)
     {
         //
         try {
-            $accommodationPrices = AccommodationPrice::with(['accommodation'])
-                                    ->where('accommodation_id','=',$accommodationId)
+            $accommodationPrices = AccommodationDiscount::where('accommodation_id','=',$accommodationId)
                                     ->get();
             if($accommodationPrices->isEmpty()){
                 return response()->json(
                     [
                             'data'=>[],
-                            'message' => 'No existen precios para el Alojamiento',
+                            'message' => 'No existen descuentos para el Alojamiento',
                            'status'    => false], 
                     200);
     
@@ -141,30 +106,29 @@ class AccommodationPriceController extends Controller
             return response()->json(
                 ['data'=>$accommodationPrices,
                        'status'    => true,
-                       'message' => 'precios encontrados'],
+                       'message' => 'descuentos encontrados'],
                200);
 
 
         } catch (Exception $e) {
-            Log::error('Error al obtener los precios: '.$e->getMessage());
+            Log::error('Error al obtener los descuentos: '.$e->getMessage());
             return response()->json(
                 [ 'data'=>[],
-                        'message' => 'Error al obtener los precios',
+                        'message' => 'Error al obtener los descuentos',
                        'status'   => false], 
                 500);
         }
 
     }
-
     public function delete( $id)
     {
         //
         
         try{
-            $accommodationPrice = AccommodationPrice::find($id);
+            $accommodationPrice = AccommodationDiscount::find($id);
             if($accommodationPrice)
             {
-             $accommodationPriceUpdated = $accommodationPrice->update(['status'=>0]);
+             $accommodationPriceUpdated = $accommodationPrice->delete();
             }else{
                 $accommodationPriceUpdated = false;
             }

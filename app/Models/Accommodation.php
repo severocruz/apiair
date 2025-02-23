@@ -28,6 +28,8 @@ class Accommodation extends Model
     'status'
     ];
     //
+
+
     public function user()
     {
         return $this->belongsTo(User::class, 'host_id');
@@ -37,4 +39,11 @@ class Accommodation extends Model
     {
         return $this->belongsTo(AccommodationType::class, 'type_id');
     }
+
+    public function describe()
+    {
+        return $this->belongsTo(AccommodationDescribe::class, 'describe_id');
+    }
+
+    
 }

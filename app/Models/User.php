@@ -32,6 +32,7 @@ class User extends Authenticatable
         'document_type',
         'document_photo_front',
         'document_photo_back',
+        'confirm_photo',
         'status'
     ];
 

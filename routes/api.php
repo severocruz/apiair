@@ -19,6 +19,7 @@ use App\Http\Controllers\Accommodation\AccommodationPhotoController;
 use App\Http\Controllers\Accommodation\AccommodationTypeController;
 use App\Http\Controllers\Accommodation\AccommodationDiscountController;
 use App\Http\Controllers\AspectController;
+use App\Http\Controllers\Auth\UserController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
@@ -128,6 +129,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::controller(AccommodationPhotoController::class)->prefix('accommodation_photos')->group(function(){
         Route::get('', 'index');
         Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
+        Route::get('/main/{accommodationId}/accommodation', 'showMainByAccommodation');
         Route::post('', 'store');
         Route::post('/upload', 'upload');
         Route::put('/{accommodationPhoto}', 'update');
@@ -144,6 +146,13 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::controller(AccommodationTypeController::class)->prefix('accommodation_types')->group(function(){
         Route::get('', 'index');
     });
+
+    Route::controller(UserController::class)->prefix('users')->group(function(){
+        Route::put('/{user}', 'update');
+        Route::get('/{id}', 'show');
+        Route::post('upload/{user}', 'upload');
+    });
+
 
 });
 

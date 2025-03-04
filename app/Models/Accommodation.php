@@ -42,8 +42,26 @@ class Accommodation extends Model
 
     public function describe()
     {
-        return $this->belongsTo(AccommodationDescribe::class, 'describe_id');
+        return $this->belongsTo(Describe::class, 'describe_id');
     }
 
-    
+    public function aspects(){
+        return $this->hasMany(AccommodationAspect::class,'accommodation_id');
+    }
+
+    public function services(){
+        return $this->hasMany(AccommodationService::class,'accommodation_id');
+    }
+    public function prices(){
+        return $this->hasMany(AccommodationPrice::class,'accommodation_id');
+    }
+
+    public function photos(){
+        return $this->hasMany(AccommodationPhoto::class,'accommodation_id');
+    }
+
+    public function discounts(){
+        return $this->hasMany(AccommodationDiscount::class,'accommodation_id');
+    }
+
 }

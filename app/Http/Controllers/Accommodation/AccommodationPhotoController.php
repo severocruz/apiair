@@ -86,10 +86,7 @@ class AccommodationPhotoController extends Controller
         //
         try{
             $validator = Validator::make($request->all(), [
-                'accommodation_id' => 'required',
-                'photo_url'=>'required|string|min:3',
                 'mainPhoto' => 'required|boolean',
-                'order'=>'required|numeric'
             ]);
 
             if ($validator->fails()) {
@@ -208,6 +205,40 @@ class AccommodationPhotoController extends Controller
 
     }
 
+    public function showMainByAccommodation ($accommodationId)
+    {
+        //
+        try {
+            $accommodationPhotos = AccommodationPhoto::with(['accommodation'])
+                                    ->where('accommodation_id','=',$accommodationId)
+                                    ->first();
+            if(!$accommodationPhotos){
+                return response()->json(
+                    [
+                            'data'=>[],
+                            'message' => 'No existen fotos para el Alojamiento',
+                           'status'    => false], 
+                    200);
+    
+            }
+            return response()->json(
+                ['data'=>$accommodationPhotos,
+                       'status'    => true,
+                       'message' => 'fotos encontradas'],
+               200);
+
+
+        } catch (Exception $e) {
+            Log::error('Error al obtener las fotos: '.$e->getMessage());
+            return response()->json(
+                [ 'data'=>[],
+                        'message' => 'Error al obtener las fotos',
+                       'status'   => false], 
+                500);
+        }
+
+    }
+
     public function delete( $id)
     {
         //
@@ -216,7 +247,9 @@ class AccommodationPhotoController extends Controller
             $accommodationPhoto = AccommodationPhoto::find($id);
             if($accommodationPhoto)
             {
-             $accommodationPhotoUpdated = $accommodationPhoto->update(['status'=>0]);
+                $image_path = public_path().'/images/accommodations/'.$accommodationPhoto->photo_url;
+                unlink($image_path);
+             $accommodationPhotoUpdated = $accommodationPhoto->delete();
             }else{
                 $accommodationPhotoUpdated = false;
             }
@@ -230,7 +263,7 @@ class AccommodationPhotoController extends Controller
                     400);
                     
             }
-            $data = ['data'=>$accommodationPhotoUpdated,
+            $data = ['data'=>$accommodationPhoto,
             'status'    => true,
             'message' => 'descripcion eliminada'];
             return response()->json(

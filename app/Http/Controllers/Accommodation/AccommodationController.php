@@ -90,7 +90,7 @@ class AccommodationController extends Controller
             // (array)$validator->errors());
             $data = ['message' => 'Error en la validación de datos',
             'errors' => $validator->errors(),
-           'status'  => '400'];
+           'status'  => false];
                 return response()->json(
                     $data, 
                     400);
@@ -120,7 +120,15 @@ class AccommodationController extends Controller
     {
         //
         try {
-            $accommodation = Accommodation::with(['user','type'])->find($id);
+            $accommodation = Accommodation::with(['user',
+                                                            'type',
+                                                            'describe',
+                                                            'aspects',
+                                                            'services',
+                                                            'prices',
+                                                            'photos',
+                                                            'discounts'])
+                            ->find($id);
             if(!$accommodation){
                 return response()->json(
                     [
@@ -151,8 +159,16 @@ class AccommodationController extends Controller
     {
         try {
             // with(relations: ['user','type'])
-             $accommodations = Accommodation::where('status','=','true')
-            ->where('host_id','=',$userId)->get();
+             $accommodations = Accommodation::with(['user',
+                                                            'type',
+                                                            'describe',
+                                                            'aspects',
+                                                            'services',
+                                                            'prices',
+                                                            'photos',
+                                                            'discounts'])
+                                            ->where('status','=','true')
+                                            ->where('host_id','=',$userId)->get();
             if($accommodations->isEmpty()){
                 return response()->json(
                     [

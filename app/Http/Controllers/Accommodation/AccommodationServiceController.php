@@ -17,7 +17,7 @@ class AccommodationServiceController extends Controller
             $accommodationServices = AccommodationService::with(relations: ['service','accommodation'])
             ->where('status','=','true')->get();
             if($accommodationServices->isEmpty()){
-                return response()->json(
+                return \response()->json(
                     [
                             'data'=>[],
                             'message' => 'No hay servicios registrados',
@@ -121,7 +121,8 @@ class AccommodationServiceController extends Controller
     {
         //
         try {
-            $accommodationServices = AccommodationService::where('accommodation_id','=',$accommodationId)
+            $accommodationServices = AccommodationService::with(relations: ['service'])
+                                                         ->where('accommodation_id','=',$accommodationId)
                                                          ->where('status','=',true)
                                     ->get();
             if($accommodationServices->isEmpty()){

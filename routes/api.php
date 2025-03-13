@@ -20,6 +20,7 @@ use App\Http\Controllers\Accommodation\AccommodationTypeController;
 use App\Http\Controllers\Accommodation\AccommodationDiscountController;
 use App\Http\Controllers\AspectController;
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Traveler\ExploreController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
@@ -43,6 +44,12 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::get('/services/{id}', 'show');
         Route::post('/services', 'store');
         
+    });
+
+    Route::controller(ExploreController::class)->group(function () {
+        Route::prefix('explore')->group(function () {
+            Route::get('accommodation/nearby', 'HandleGetNearbyAccomodation');
+        });
     });
 
     Route::controller(AccommodationController::class)->prefix('accommodations')->group(function(){

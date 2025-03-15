@@ -25,7 +25,8 @@ class Accommodation extends Model
     'number_bathrooms',
     'number_beds',
     'price_night',
-    'status'
+    'status',
+    'published'
     ];
     //
 

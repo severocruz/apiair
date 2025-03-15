@@ -84,10 +84,10 @@ class AccommodationInstructionController extends Controller
         //
         try{
             $validator = Validator::make($request->all(), [
-                'accommodation_id' => 'required',
-                'title' => 'required|string|min:3',
+                // 'accommodation_id' => 'required',
+                // 'title' => 'required|string|min:3',
                 'description'=>'required|string|min:3',
-                'type'=>'required|string|min:3'
+                // 'type'=>'required|string|min:3'
             ]);
 
             if ($validator->fails()) {
@@ -125,7 +125,8 @@ class AccommodationInstructionController extends Controller
     {
         //
         try {
-            $accommodationInstructions = AccommodationInstruction::with(['accommodation'])
+            $accommodationInstructions = AccommodationInstruction::orderBy('id','ASC')
+                                    ->with(['accommodation'])
                                     ->where('accommodation_id','=',$accommodationId)
                                     ->get();
             if($accommodationInstructions->isEmpty()){

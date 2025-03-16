@@ -65,7 +65,7 @@ class AccommodationRulesController extends Controller
                 ['data'=>$accommodationRule,
                        'status'    => true,
                        'message' => 'regla registrada'],
-               201);
+               200);
             }catch (Exception $e) {
                 
                 Log::error('Error al registrar la regla: '.$e->getMessage(),
@@ -124,8 +124,10 @@ class AccommodationRulesController extends Controller
     {
         //
         try {
-            $accommodationRules = AccommodationRule::with(['accommodation'])
+            $accommodationRules = AccommodationRule::orderBy('id','desc') 
+                                    ->with(['accommodation'])
                                     ->where('accommodation_id','=',$accommodationId)
+                                    ->where('status','=',true)
                                     ->get();
             if($accommodationRules->isEmpty()){
                 return response()->json(
@@ -163,6 +165,7 @@ class AccommodationRulesController extends Controller
             if($accommodationRule)
             {
              $accommodationRuleUpdated = $accommodationRule->update(['status'=>0]);
+             $accommodationRule = AccommodationRule::find($id);
             }else{
                 $accommodationRuleUpdated = false;
             }
@@ -176,7 +179,7 @@ class AccommodationRulesController extends Controller
                     400);
                     
             }
-            $data = ['data'=>$accommodationRuleUpdated,
+            $data = ['data'=>$accommodationRule,
             'status'    => true,
             'message' => 'regla eliminada'];
             return response()->json(

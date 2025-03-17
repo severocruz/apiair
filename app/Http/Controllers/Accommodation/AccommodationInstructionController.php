@@ -65,7 +65,7 @@ class AccommodationInstructionController extends Controller
                 ['data'=>$accommodationInstruction,
                        'status'    => true,
                        'message' => 'Instrucción registrada'],
-               201);
+               200);
             }catch (Exception $e) {
                 
                 Log::error('Error al registrar la Instrucción: '.$e->getMessage(),

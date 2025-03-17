@@ -65,4 +65,12 @@ class Accommodation extends Model
         return $this->hasMany(AccommodationDiscount::class,'accommodation_id');
     }
 
+    public function rules(){
+        return $this->hasMany(AccommodationRule::class,'accommodation_id');
+    }
+    public function instructions(){
+        return $this->hasMany(AccommodationInstruction::class,'accommodation_id');
+    }
+
+
 }

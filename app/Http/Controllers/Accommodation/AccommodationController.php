@@ -147,7 +147,9 @@ class AccommodationController extends Controller
                                                             'services',
                                                             'prices',
                                                             'photos',
-                                                            'discounts'])
+                                                            'discounts',
+                                                            'rules',
+                                                            'instructions'])
                             ->find($id);
             if(!$accommodation){
                 return response()->json(
@@ -187,7 +189,9 @@ class AccommodationController extends Controller
                                                             'services',
                                                             'prices',
                                                             'photos',
-                                                            'discounts'])
+                                                            'discounts',
+                                                            'rules',
+                                                            'instructions'])
                                             ->where('status','=','true')
                                             ->where('host_id','=',$userId)->get();
             if($accommodations->isEmpty()){

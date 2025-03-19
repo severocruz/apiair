@@ -15,7 +15,7 @@ class ReserveController extends Controller
     {
         try {
             $reserves = Reserve::with(relations: ['accommodation','user'])
-            ->where('status','=','true')->get();
+            ->where('status','=',true)->get();
             if($reserves->isEmpty()){
                 return response()->json(
                     [
@@ -47,7 +47,7 @@ class ReserveController extends Controller
                 'accommodation_id' => 'required',
                 'user_id' => 'required',
                 'start_date'=>'date|required',
-                'enda_date'=>'date|required',
+                'end_date'=>'date|required',
                 'number_guests'=>'required',
                 'total_price'=>'required',
                 'cash_discount'=>'required',
@@ -69,7 +69,7 @@ class ReserveController extends Controller
                 ['data'=>$reserve,
                        'status'    => true,
                        'message' => 'Reserva registrada'],
-               201);
+               200);
             }catch (Exception $e) {
                 
                 Log::error('Error al registrar la reserva: '.$e->getMessage(),

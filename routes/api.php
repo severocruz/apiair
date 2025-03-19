@@ -21,6 +21,7 @@ use App\Http\Controllers\Accommodation\AccommodationDiscountController;
 use App\Http\Controllers\AspectController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Traveler\ExploreController;
+use App\Http\Controllers\Reserve\ReserveController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
@@ -158,6 +159,11 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::put('/{user}', 'update');
         Route::get('/{id}', 'show');
         Route::post('upload/{user}', 'upload');
+    });
+    
+    Route::controller(ReserveController::class)->prefix('reserves')->group(function(){
+        Route::get('', 'index');
+        Route::post('', 'store');
     });
 
 

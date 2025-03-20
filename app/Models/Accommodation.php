@@ -25,7 +25,8 @@ class Accommodation extends Model
     'number_bathrooms',
     'number_beds',
     'price_night',
-    'status'
+    'status',
+    'published'
     ];
     //
 
@@ -63,5 +64,13 @@ class Accommodation extends Model
     public function discounts(){
         return $this->hasMany(AccommodationDiscount::class,'accommodation_id');
     }
+
+    public function rules(){
+        return $this->hasMany(AccommodationRule::class,'accommodation_id');
+    }
+    public function instructions(){
+        return $this->hasMany(AccommodationInstruction::class,'accommodation_id');
+    }
+
 
 }

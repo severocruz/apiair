@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Traveler;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Accommodation;
-use Log;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class ExploreController extends Controller{
@@ -42,7 +42,7 @@ class ExploreController extends Controller{
         Log::info('Getting nearby accomodation');
         try {
             $accomodations = Accommodation::with(relations: ['type', 'describe', 'aspects', 'services', 'prices', 'photos'])
-            ->where('status','=','true')->get();
+            ->where('status','=','true')->where('published','=',true)->get();
             if($accomodations->isEmpty()){
                 return response()->json(
                     [

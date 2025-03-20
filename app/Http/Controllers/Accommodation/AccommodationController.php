@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Accommodation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Accommodation;
+use App\Models\AccommodationInstruction;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -59,6 +60,25 @@ class AccommodationController extends Controller
                     
             }
             $accommodation = Accommodation::create($request->all());
+
+            AccommodationInstruction::create([
+                                                     'accommodation_id'=>$accommodation->id,
+                                                     'title'=>'¿Como llegar?',
+                                                     'description'=>'',
+                                                     'type'=>'encontrar',
+                                                     'status'=>1]);
+            AccommodationInstruction::create([
+                                                        'accommodation_id'=>$accommodation->id,
+                                                        'title'=>'Instrucciones de llegada',
+                                                        'description'=>'',
+                                                        'type'=>'llegada',
+                                                        'status'=>1]);                                                     
+            AccommodationInstruction::create([
+                                                        'accommodation_id'=>$accommodation->id,
+                                                        'title'=>'Instrucciones de salida',
+                                                        'description'=>'',
+                                                        'type'=>'salida',
+                                                        'status'=>1]);
             return response()->json(
                 ['data'=>$accommodation,
                        'status'    => true,
@@ -127,7 +147,9 @@ class AccommodationController extends Controller
                                                             'services',
                                                             'prices',
                                                             'photos',
-                                                            'discounts'])
+                                                            'discounts',
+                                                            'rules',
+                                                            'instructions'])
                             ->find($id);
             if(!$accommodation){
                 return response()->json(
@@ -159,14 +181,17 @@ class AccommodationController extends Controller
     {
         try {
             // with(relations: ['user','type'])
-             $accommodations = Accommodation::with(['user',
+             $accommodations = Accommodation::orderBy('id','DESC')
+                                            ->with(['user',
                                                             'type',
                                                             'describe',
                                                             'aspects',
                                                             'services',
                                                             'prices',
                                                             'photos',
-                                                            'discounts'])
+                                                            'discounts',
+                                                            'rules',
+                                                            'instructions'])
                                             ->where('status','=','true')
                                             ->where('host_id','=',$userId)->get();
             if($accommodations->isEmpty()){

@@ -50,6 +50,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::controller(ExploreController::class)->group(function () {
         Route::prefix('explore')->group(function () {
             Route::get('accommodation/nearby', 'HandleGetNearbyAccomodation');
+            Route::get('accommodation/{id}', 'HandleGetAccommodationById');
         });
     });
 

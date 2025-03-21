@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Reserve;
 
 use App\Http\Controllers\Controller;
+use App\Models\AccommodationAvailability;
+use DateTime;
+use DatePeriod;
+use DateInterval;
 use Illuminate\Http\Request;
 use App\Models\Reserve;
 use Exception;
@@ -65,6 +69,17 @@ class ReserveController extends Controller
                     
             }
             $reserve = Reserve::create($request->all());
+            $rango = $this->getRangeDate($request['start_date'], $request['end_date'], 'Y-m-d');
+           $reserve_id = $reserve->id;
+            foreach ($rango as $value) {
+                # code...
+                $availability =["accommodation_id"=>$reserve->accommodation_id,
+                "start_date"=>$value,
+                "availability"=>0,
+                "reserve_id"=>$reserve_id,
+                                ]; 
+                AccommodationAvailability::create($availability);
+            }
             return response()->json(
                 ['data'=>$reserve,
                        'status'    => true,
@@ -81,5 +96,21 @@ class ReserveController extends Controller
                     500);
             }
 
+    }
+    public function getRangeDate($date_ini, $date_end, $format) {
+
+        $dt_ini = DateTime::createFromFormat($format, $date_ini);
+        $dt_end = DateTime::createFromFormat($format, $date_end);
+        $period = new DatePeriod(
+            $dt_ini,
+            new DateInterval('P1D'),
+            $dt_end,
+        );
+        $range = [];
+        foreach ($period as $date) {
+            $range[] = $date->format($format);
+        }
+        $range[] = $date_end;
+        return $range;
     }
 }

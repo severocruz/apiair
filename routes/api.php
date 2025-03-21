@@ -129,9 +129,9 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::controller(AccommodationAvailabilityController::class)->prefix('accommodation_availabilities')->group(function(){
         Route::get('', 'index');
         Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
-        Route::post('', 'store');
-        Route::put('/{accommodationAvailability}', 'update');
-        Route::delete('/{id}', 'delete');
+        // Route::post('', 'store');
+        // Route::put('/{accommodationAvailability}', 'update');
+        // Route::delete('/{id}', 'delete');
     });
 
     Route::controller(AccommodationPhotoController::class)->prefix('accommodation_photos')->group(function(){
@@ -165,6 +165,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::get('', 'index');
         Route::post('', 'store');
     });
+
 
 
 });

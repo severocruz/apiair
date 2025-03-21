@@ -15,6 +15,7 @@ class AccommodationAvailability extends Model
         'end_date',
         'availability',
         'status',
+        'reserve_id'
     ];
 
     public function accommodation()

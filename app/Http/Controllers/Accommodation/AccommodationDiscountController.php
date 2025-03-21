@@ -159,4 +159,5 @@ class AccommodationDiscountController extends Controller
                     500);
             }	
     }
+
 }

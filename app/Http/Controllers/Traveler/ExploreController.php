@@ -13,7 +13,17 @@ class ExploreController extends Controller{
     public function HandleGetAccommodationById($id){
         Log::info('Getting accomodation by id');
         try {
-            $accomodation = Accommodation::with(relations: ['type', 'describe', 'aspects', 'services', 'prices', 'photos'])->where('id', $id)->first();
+            $accomodation = Accommodation::with(relations: [
+                'type', 
+                'describe', 
+                'aspects.aspect', 
+                'services.service', 
+                'photos',
+                'discounts',
+                'rules',
+                'instructions',
+                'user'
+            ])->where('id', $id)->first();
             if($accomodation == null){
                 return response()->json(
                     [

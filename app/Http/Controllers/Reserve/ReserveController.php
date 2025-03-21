@@ -97,6 +97,39 @@ class ReserveController extends Controller
             }
 
     }
+    public function showByAccommodation ($accommodationId)
+    {
+        //
+        try {
+            $accommodationPrices = Reserve::where('accommodation_id','=',$accommodationId)
+                                       ->where('status','=',true)
+                                       ->get();
+            if($accommodationPrices->isEmpty()){
+                return response()->json(
+                    [
+                            'data'=>[],
+                            'message' => 'No existen reservas para el Alojamiento',
+                           'status'    => false], 
+                    200);
+    
+            }
+            return response()->json(
+                ['data'=>$accommodationPrices,
+                       'status'    => true,
+                       'message' => 'reservas encontradas'],
+               200);
+
+
+        } catch (Exception $e) {
+            Log::error('Error al obtener reservas: '.$e->getMessage());
+            return response()->json(
+                [ 'data'=>[],
+                        'message' => 'Error al obtener reservas',
+                       'status'   => false], 
+                500);
+        }
+
+    }
     public function getRangeDate($date_ini, $date_end, $format) {
 
         $dt_ini = DateTime::createFromFormat($format, $date_ini);

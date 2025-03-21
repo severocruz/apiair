@@ -165,6 +165,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::controller(ReserveController::class)->prefix('reserves')->group(function(){
         Route::get('', 'index');
         Route::post('', 'store');
+        Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
     });
 
 

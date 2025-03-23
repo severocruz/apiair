@@ -166,6 +166,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::get('', 'index');
         Route::post('', 'store');
         Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
+        Route::get('/{userId}/user', 'showByUser');
     });
 
 

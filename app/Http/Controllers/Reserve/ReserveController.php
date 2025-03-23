@@ -141,7 +141,7 @@ class ReserveController extends Controller
                                        ->with(['accommodation'])
                                        ->where('user_id','=',$userId)
                                        ->where('status','=',true)
-                                       ->where('start_date','>',$fechaAyer)
+                                       ->where('end_date','>',$fechaAyer)
                                        ->get();
             if($accommodationReserves->isEmpty()){
                 return response()->json(

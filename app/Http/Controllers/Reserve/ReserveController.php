@@ -135,10 +135,13 @@ class ReserveController extends Controller
     {
         //
         try {
+            $fecha_actual = date("Y-m-d");
+            $fechaAyer=date("Y-m-d",strtotime($fecha_actual."- 1 days"));
             $accommodationReserves = Reserve::orderByDesc('id')
                                        ->with(['accommodation'])
                                        ->where('user_id','=',$userId)
                                        ->where('status','=',true)
+                                       ->where('start_date','>',$fechaAyer)
                                        ->get();
             if($accommodationReserves->isEmpty()){
                 return response()->json(

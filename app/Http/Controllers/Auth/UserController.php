@@ -146,4 +146,59 @@ class UserController extends Controller
                     500);
             }	
     }
+    public function changePassword(User $user, Request $request)
+    {
+        //
+        try{
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|min:6',
+            ]);
+            
+            if ($validator->fails()) {
+            //     Log::error('Error al validar el foto: ',
+            // (array)$validator->errors());
+            $data = ['message' => 'Error en la validación de datos',
+            'errors' => $validator->errors(),
+           'status'  => false];
+                return response()->json(
+                    $data, 
+                    400);
+                    
+            }
+          
+           
+             //Storage::putFileAs('public/images/accommodations',$photo,$photoName);
+            $isUpdated = $user->update($request->all());
+             
+            if($isUpdated){
+                $userUpdated = User::find($user->id);
+                $data = ['data'=>$userUpdated,
+                'status'    => true,
+                'message' => 'contraseña editada'];
+                return response()->json(
+                    $data,
+                   200);
+             } else{
+                $data = ['message' => 'No se pudo editar la contraseña',
+                'errors' => [],
+               'status'  => false];
+                    return response()->json(
+                        $data, 
+                        400);
+                        
+             }
+          
+            }catch (Exception $e) {
+                
+                Log::error('Error al editar contraseña : '.$e->getMessage(),
+            ['trace' => $e->getTraceAsString()]);
+            $data=[ 'data'=>null,
+                    'message' => 'Error al editar contraseña',
+                    'status'   => false];
+                return response()->json(
+                    $data, 
+                    500);
+            }	
+    }
+
 }

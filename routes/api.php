@@ -158,6 +158,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
 
     Route::controller(UserController::class)->prefix('users')->group(function(){
         Route::put('/{user}', 'update');
+        Route::put('/{user}/password', 'changePassword');
         Route::get('/{id}', 'show');
         Route::post('upload/{user}', 'upload');
     });

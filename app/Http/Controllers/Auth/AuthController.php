@@ -18,9 +18,9 @@ class AuthController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
-                'lastname' => 'required|string',
-                'email' => 'required|email|unique:users',
+                'name' => 'required|string|min:2',
+                'lastname' => 'required|string|min:2',
+                'email' => 'required|email|unique:users|min:4',
                 'password' => 'required|string|min:6',
             ]);
 
@@ -44,7 +44,7 @@ class AuthController extends Controller
                 ['data'=>$response,
                        'status'    => true,
                        'message' => 'Usuario registrado'],
-               201);
+               200);
             // return response()->json($response, 200);
         } catch (Exception $e) {
             Log::error('Error al registrar el usuario: ' . $e->getMessage());

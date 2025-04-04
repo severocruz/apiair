@@ -13,4 +13,12 @@ class Describe extends Model
         'describe',
         'status'
     ];
+
+    protected $appends = [
+        'icon'
+    ];
+    public function getIconAttribute()
+    {
+        return url('images/describes/'.$this->id.'.png');
+    }
 }

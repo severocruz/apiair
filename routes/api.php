@@ -51,6 +51,8 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::prefix('explore')->group(function () {
             Route::get('accommodation/nearby', 'HandleGetNearbyAccomodation');
             Route::get('accommodation/{id}', 'HandleGetAccommodationById');
+            Route::get('accommodation/describe/{describe_id}', 'HandleGetAccomodationByDescribe');
+            Route::get('describes', 'HandleGetDescribesAvailables');
         });
     });
 

@@ -3,6 +3,7 @@
 
 // use Illuminate\Http\Request;
 use App\Http\Controllers\Accommodation\DescribeController;
+use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\Auth\AuthController;
@@ -56,6 +57,11 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         });
     });
 
+    Route::controller(FavoriteController::class)->prefix('favorites')->group(function () {
+        Route::get('', 'HandleGetFavoritesByUser');
+        Route::post('', 'HandleStoreAccommodationFavoriteUser');
+        // Route::delete('/{id}', 'HandleDeleteFavorite');
+    });
     Route::controller(AccommodationController::class)->prefix('accommodations')->group(function(){
         Route::get('', 'index');
         Route::get('/{id}', 'show');

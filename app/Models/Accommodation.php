@@ -72,5 +72,13 @@ class Accommodation extends Model
         return $this->hasMany(AccommodationInstruction::class,'accommodation_id');
     }
 
+    public function favorites(){
+        return $this->hasMany(Favorite::class,'accommodation_id');
+    }
 
+    public function getIsFavoriteAttribute()
+    {
+        return $this->favorites()->where('user_id', auth()->id())->exists();
+    }
+    protected $appends = ['is_favorite'];
 }

@@ -15,7 +15,7 @@ class FavoriteController extends Controller
         ]);
         try{
             $user = $request->user();
-            $favorites = Favorite::with(['accommodation.photos', 'accommodation.type', 'accommodation.describe'])
+            $favorites = Favorite::with(['accommodation.photos', 'accommodation.prices'])
                 ->where('user_id', $user->id)
                 ->get();
 
@@ -46,6 +46,38 @@ class FavoriteController extends Controller
         }
     }
 
+    public function HandleRemoveAccommodationFavoriteUser(Request $request){
+        try {
+            $user = $request->user();
+            $accommodationId = $request->input('accommodation_id'); 
+            $existingFavorite = Favorite::where('user_id', $user->id)
+                ->where('accommodation_id', $accommodationId)
+                ->first();
+
+            if (!$existingFavorite) {
+                return response()->json([
+                    'data' => [],
+                    'message' => 'El alojamiento no está en favoritos',
+                    'status' => false
+                ], 200);
+            }
+
+            // Delete the favorite
+            $existingFavorite->delete();
+
+            return response()->json([
+                'data' => [],
+                'message' => 'Alojamiento eliminado de favoritos',
+                'status' => true
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'data' => [],
+                'message' => 'Ocurrio un error al eliminar el alojamiento de favoritos',
+                'status' => false
+            ], 500);
+        }
+    }
     public function HandleStoreAccommodationFavoriteUser(Request $request){
         try {
             $user = $request->user();

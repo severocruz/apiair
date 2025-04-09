@@ -29,7 +29,7 @@ use App\Http\Controllers\Reserve\ReserveController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-
+Route::post('/verification', [AuthController::class, 'sendVerificationEmail'])->name('verification');
 Route::controller(AuthController::class)
 ->middleware('auth:sanctum')->prefix('auth')
 ->group(function () {

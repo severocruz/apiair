@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
+use App\Mail\EmailVerification;
 use stdClass;
 
 class AuthController extends Controller
@@ -116,6 +118,30 @@ class AuthController extends Controller
             200
         );
         
+    }
+
+    public function sendVerificationEmail(Request $request)
+    {
+        try {
+         //  $user = User::where('email', $request->email)->firstOrFail();
+            $verificationCode = rand(100000, 999999);
+            //$user->verification_code = $verificationCode;
+           // $user->save();
+            // Mail::to($user->email)->send(new EmailVerification($verificationCode));
+             Mail::to($request->email)->send(new EmailVerification($verificationCode));
+            return response()->json(
+                ['message' => 'Código de verificación enviado',
+                    'status' => true],
+                200
+            );
+        } catch (Exception $e) {
+            Log::error('Error al enviar el correo de verificación: ' . $e->getMessage());
+            return response()->json(
+                ['message' => 'Error al enviar el correo de verificación',
+                    'status' => false],
+                500
+            );
+        }
     }
 
    

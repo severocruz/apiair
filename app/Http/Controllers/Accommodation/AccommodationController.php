@@ -261,6 +261,7 @@ class AccommodationController extends Controller
 
     public function filter(Request $request)
     {
+        Log::info("Datos del request:", $request->all());
         try {
             $typeId=$request->input('type_id');
             if($typeId == null){

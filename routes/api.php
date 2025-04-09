@@ -60,6 +60,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::controller(FavoriteController::class)->prefix('favorites')->group(function () {
         Route::get('', 'HandleGetFavoritesByUser');
         Route::post('', 'HandleStoreAccommodationFavoriteUser');
+        Route::post('remove', 'HandleRemoveAccommodationFavoriteUser');
         // Route::delete('/{id}', 'HandleDeleteFavorite');
     });
     Route::controller(AccommodationController::class)->prefix('accommodations')->group(function(){

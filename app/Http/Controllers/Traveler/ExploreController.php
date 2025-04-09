@@ -127,7 +127,6 @@ class ExploreController extends Controller{
                            'message' => 'No existen anuncios registradas',
                            'status'    => false], 
                     200);
-    
             }
             return response()->json([
                 'data'=>$accomodations,

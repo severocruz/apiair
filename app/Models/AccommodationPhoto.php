@@ -17,10 +17,20 @@ class AccommodationPhoto extends Model
         'status'
     ];
 
+    protected $appends = [
+        'url'
+    ];
+
+    public function getUrlAttribute()
+    {
+        return url('images/accommodations/'.$this->photo_url);
+    }
+
     public function accommodation()
     {
         return $this->belongsTo(Accommodation::class,'accommodation_id');
     }
 
+    
     //
 }

@@ -6,12 +6,12 @@
     <title>Código de Verificación</title>
 </head>
 <body>
-    <p>¡Hola! Este es tu codigo de verificación .</p>
+    <p>¡Hola! Este es tu codigo de verificación SAMAY: .</p>
     <ul>
-        <li>Código: {{ $verificationCode }}</li>
+        <li style="font-size: large; font-weight: bold;"> {{ $verificationCode }}</li>
         
     </ul>
-    <p>Y esta es la posición reportada:</p>
+  
     
 </body>
 </html>

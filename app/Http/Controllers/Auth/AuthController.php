@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
+use App\Models\VerificationCode;
 use App\Mail\EmailVerification;
 use stdClass;
 
@@ -123,14 +124,20 @@ class AuthController extends Controller
     public function sendVerificationEmail(Request $request)
     {
         try {
-         //  $user = User::where('email', $request->email)->firstOrFail();
+           $user = User::where('email', $request->email)->firstOrFail();
             $verificationCode = rand(100000, 999999);
+            VerificationCode::create([
+                'user_id' => $user->id,
+                'code' => $verificationCode.'',
+                'expires_at' => now()->addMinutes(5),
+            ]);
             //$user->verification_code = $verificationCode;
            // $user->save();
             // Mail::to($user->email)->send(new EmailVerification($verificationCode));
              Mail::to($request->email)->send(new EmailVerification($verificationCode));
             return response()->json(
-                ['message' => 'Código de verificación enviado',
+                [
+                    'message' => 'Código de verificación enviado',
                     'status' => true],
                 200
             );
@@ -138,6 +145,58 @@ class AuthController extends Controller
             Log::error('Error al enviar el correo de verificación: ' . $e->getMessage());
             return response()->json(
                 ['message' => 'Error al enviar el correo de verificación',
+                    'status' => false],
+                500
+            );
+        }
+    }
+
+    public function verificate(Request $request)
+    {
+        try {
+            $user = User::where('email', $request->email)->firstOrFail();
+            $code = VerificationCode::where('code', '=', $request->code)
+                ->where('user_id','=', $user->id)
+                ->where('is_used','=', false)
+                ->where('expires_at', '>', now())
+                ->first();
+            if(isset($code)){
+                if($code->is_used) {
+                    return response()->json(
+                        ['message' => 'El código ya ha sido utilizado',
+                            'status' => false],
+                        400
+                    );
+                }
+                if($code->expires_at < now()) {
+                    return response()->json(
+                        ['message' => 'El código ha expirado',
+                            'status' => false],
+                        400
+                    );
+                }
+            }else{
+                return response()->json(
+                    ['message' => 'Código no válido',
+                        'status' => false],
+                    400
+                );
+            }
+           
+            $code->update(['is_used' => true]);
+            //$user = User::find($request->user_id);
+            $user->update(['email_verified_at' => now(),
+                'verified' => true]);
+            return response()->json(
+                [
+                    'message' => 'Código verificado con éxito',
+                    'status' => true],
+                200
+            );
+        } catch (Exception $e) {
+            Log::error('Error al verificar código: ' . $e->getMessage());
+            return response()->json(
+                ['message' => 'Error al verificar código',
                     'status' => false],
                 500
             );

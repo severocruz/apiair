@@ -70,7 +70,8 @@ class ReserveController extends Controller
             }
             $reserve = Reserve::create($request->all());
             $rango = $this->getRangeDate($request['start_date'], $request['end_date'], 'Y-m-d');
-           $reserve_id = $reserve->id;
+            $reserve_id = $reserve->id;
+            $reserveSend = Reserve::with(relations: ['accommodation','user'])->findOrFail($reserve_id);
             foreach ($rango as $value) {
                 # code...
                 $availability =["accommodation_id"=>$reserve->accommodation_id,
@@ -81,7 +82,7 @@ class ReserveController extends Controller
                 AccommodationAvailability::create($availability);
             }
             return response()->json(
-                ['data'=>$reserve,
+                ['data'=>$reserveSend,
                        'status'    => true,
                        'message' => 'Reserva registrada'],
                200);

@@ -34,5 +34,8 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'vpay' => [
+    'webhook_secret' => env('VPAY_WEBHOOK_SECRET'),
+    ],
 
 ];

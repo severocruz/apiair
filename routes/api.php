@@ -23,6 +23,7 @@ use App\Http\Controllers\AspectController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Traveler\ExploreController;
 use App\Http\Controllers\Reserve\ReserveController;
+use App\Http\Controllers\PaymentController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
@@ -30,7 +31,8 @@ use App\Http\Controllers\Reserve\ReserveController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/verification', [AuthController::class, 'sendVerificationEmail'])->name('verification');
-Route::post('/verificate', [AuthController::class, 'verificate'])->name('verificates');
+ Route::post('/payload', [PaymentController::class, 'store'])->name('stores');
+
 Route::controller(AuthController::class)
 ->middleware('auth:sanctum')->prefix('auth')
 ->group(function () {

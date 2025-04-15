@@ -16,4 +16,11 @@ class Service extends Model
         'type_id',
         'status'
     ];
+    protected $appends = [
+        'icon'
+    ];
+    public function getIconAttribute()
+    {
+        return url('images/services/'.$this->id.'.png');
+    }
 }

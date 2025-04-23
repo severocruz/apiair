@@ -14,6 +14,9 @@ class HostInformation extends Model
         'dedicate',
         'pets',
         'status'
-        
+    ];
+
+    protected $casts = [
+        'status' =>'boolean'
     ];
 }

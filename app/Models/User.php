@@ -36,6 +36,11 @@ class User extends Authenticatable
         'status'
     ];
 
+    protected $casts = [
+        'verified' => 'boolean',
+        'status' =>'boolean'
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *

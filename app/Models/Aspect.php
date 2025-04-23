@@ -14,6 +14,19 @@ class Aspect extends Model
         'describe_id',
         'status'
     ];
+
+    protected $casts = [
+        'status' =>'boolean'
+    ];
+
+    protected $appends = [
+        'icon'
+    ];
+
+    public function getIconAttribute()
+    {
+        return url('images/aspects/'.$this->description.'.png');
+    }
     public function describe()
     {
         return $this->belongsTo(Describe::class,'describe_id');

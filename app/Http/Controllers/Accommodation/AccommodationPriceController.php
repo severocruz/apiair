@@ -16,7 +16,7 @@ class AccommodationPriceController extends Controller
     {
         try {
             $accommodationPrices = AccommodationPrice::with(relations: ['accommodation'])
-            ->where('status','=','true')->get();
+            ->where('status',true)->get();
             if($accommodationPrices->isEmpty()){
                 return response()->json(
                     [

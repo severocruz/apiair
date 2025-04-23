@@ -44,6 +44,38 @@ class ReserveController extends Controller
         }
     }
 
+    public function getById($id)
+    {
+        try {
+            $reserva = Reserve::with(['accommodation.prices', 'accommodation.photos', 'user'])
+                ->where('id', $id)
+                ->where('status', true)
+                ->first();
+
+            if (!$reserva) {  // Verifica si es null directamente
+                return response()->json([
+                    'data' => null,
+                    'message' => 'No existe la reserva',
+                    'status' => false
+                ], 200);
+            }
+
+            return response()->json([
+                'data' => $reserva,
+                'status' => true,
+                'message' => 'Reserva encontrada'
+            ], 200);
+            
+        } catch (Exception $e) {
+            Log::error('Error al obtener la reserva: '.$e->getMessage());
+            return response()->json([
+                'data' => null,
+                'message' => 'Error al obtener la reserva',
+                'status' => false
+            ], 500);
+        }
+    }
+
     public function store(Request $request)
     {
         try{
@@ -103,7 +135,7 @@ class ReserveController extends Controller
         //
         try {
             $accommodationPrices = Reserve::where('accommodation_id','=',$accommodationId)
-                                       ->where('status','=',true)
+                                       ->where('status',true)
                                        ->get();
             if($accommodationPrices->isEmpty()){
                 return response()->json(

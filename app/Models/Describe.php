@@ -14,6 +14,10 @@ class Describe extends Model
         'status'
     ];
 
+    protected $casts = [
+        'status' =>'boolean'
+    ];
+
     protected $appends = [
         'icon'
     ];

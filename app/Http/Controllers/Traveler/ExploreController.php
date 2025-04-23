@@ -14,7 +14,7 @@ class ExploreController extends Controller{
     public function HandleGetDescribesAvailables(){
         Log::info("Obteniendo descripciones disponibles");
         try {
-            $describes = Describe::where('status','=','true')->get();
+            $describes = Describe::where('status', 1)->get();
             Log::info('Descripciones disponibles: '.$describes->count());
             if($describes->isEmpty()){
                 return response()->json([
@@ -53,12 +53,12 @@ class ExploreController extends Controller{
                 'rules',
                 'instructions',
                 'user'
-            ])->where('describe_id', $describe_id)->where('status','=','true')->where('published','=',true)->get();
+            ])->where('describe_id', $describe_id)->where('status',true)->where('published',true)->get();
             if($accomodations->isEmpty()){
                 return response()->json(
                     [
                            'data'=>[],
-                           'message' => 'No existen anuncios registradas',
+                           'message' => 'No existen anuncios registrados para esta categoría.',
                            'status'    => false], 
                     200);
             }
@@ -119,7 +119,7 @@ class ExploreController extends Controller{
         Log::info('Getting nearby accomodation');
         try {
             $accomodations = Accommodation::with(relations: ['type', 'describe', 'aspects', 'services', 'prices', 'photos'])
-            ->where('status','=','true')->where('published','=',true)->get();
+            ->where('status',true)->where('published',true)->get();
             if($accomodations->isEmpty()){
                 return response()->json(
                     [

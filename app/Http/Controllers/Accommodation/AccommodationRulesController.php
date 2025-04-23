@@ -16,7 +16,7 @@ class AccommodationRulesController extends Controller
     {
         try {
             $accommodationRules = AccommodationRule::with(relations: ['accommodation'])
-            ->where('status','=','true')->get();
+            ->where('status',true)->get();
             if($accommodationRules->isEmpty()){
                 return response()->json(
                     [

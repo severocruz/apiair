@@ -15,7 +15,7 @@ class DescribeController extends Controller
     {
         try {
             // Agregar un campo cada resultado de $describes icon donde retorne la url que esta en public/images/describes/ el id y .png
-            $describes = Describe::where('status','=','true')->get();
+            $describes = Describe::where('status',true)->get();
             if($describes->isEmpty()){
                 return response()->json(
                     [

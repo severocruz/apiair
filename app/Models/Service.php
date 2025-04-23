@@ -16,6 +16,9 @@ class Service extends Model
         'type_id',
         'status'
     ];
+    protected $casts = [
+        'status' =>'boolean'
+    ];
     protected $appends = [
         'icon'
     ];

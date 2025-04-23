@@ -17,6 +17,10 @@ class AccommodationPhoto extends Model
         'status'
     ];
 
+    protected $casts = [
+        'status' =>'boolean'
+    ];
+
     protected $appends = [
         'url'
     ];

@@ -15,7 +15,7 @@ class AccommodationInstructionController extends Controller
     {
         try {
             $accommodationInstructions = AccommodationInstruction::with(relations: ['accommodation'])
-            ->where('status','=','true')->get();
+            ->where('status',true)->get();
             if($accommodationInstructions->isEmpty()){
                 return response()->json(
                     [

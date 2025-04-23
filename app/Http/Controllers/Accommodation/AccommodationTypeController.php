@@ -14,7 +14,7 @@ class AccommodationTypeController extends Controller
     public function index()
     {
         try {
-            $accommodationTypes = AccommodationType::where('status','=','true')
+            $accommodationTypes = AccommodationType::where('status',true)
                                                     ->get();
             if($accommodationTypes->isEmpty()){
                 return response()->json(

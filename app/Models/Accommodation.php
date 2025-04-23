@@ -30,6 +30,10 @@ class Accommodation extends Model
     ];
     //
 
+    protected $casts = [
+        'status' =>'boolean',
+        'published' =>'boolean'
+    ];
 
     public function user()
     {

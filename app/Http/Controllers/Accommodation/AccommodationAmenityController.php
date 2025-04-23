@@ -16,7 +16,7 @@ class AccommodationAmenityController extends Controller
     {
         try {
             $accommodationAmenitys = AccommodationAmenity::with(relations: ['accommodation'])
-            ->where('status','=','true')->get();
+            ->where('status',true)->get();
             if($accommodationAmenitys->isEmpty()){
                 return response()->json(
                     [

@@ -18,7 +18,7 @@ class AccommodationController extends Controller
     {
         try {
             $accommodations = Accommodation::with(relations: ['user','type'])
-            ->where('status','=','true')->get();
+            ->where('status',true)->get();
             if($accommodations->isEmpty()){
                 return response()->json(
                     [
@@ -180,6 +180,7 @@ class AccommodationController extends Controller
     }
     public function showByUserId($userId)
     {
+        Log::info("Obteniendo anuncios por Usuario");
         try {
             // with(relations: ['user','type'])
              $accommodations = Accommodation::orderBy('id','DESC')
@@ -193,7 +194,7 @@ class AccommodationController extends Controller
                                                             'discounts',
                                                             'rules',
                                                             'instructions'])
-                                            ->where('status','=','true')
+                                            ->where('status',true)
                                             ->where('host_id','=',$userId)->get();
             if($accommodations->isEmpty()){
                 return response()->json(

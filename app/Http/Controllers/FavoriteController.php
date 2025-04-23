@@ -22,7 +22,7 @@ class FavoriteController extends Controller
             if($favorites->isEmpty()){
                 return response()->json([
                     'data'=>[],
-                    'message' => 'No existen favoritos registrados',
+                    'message' => 'Todavia no tiene favoritos registrados',
                     'status'    => false
                 ],200);
             }

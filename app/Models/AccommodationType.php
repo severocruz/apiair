@@ -12,4 +12,8 @@ class AccommodationType extends Model
         'description',
         'status'
     ];
+
+    protected $casts = [
+        'status' =>'boolean'
+    ];
 }

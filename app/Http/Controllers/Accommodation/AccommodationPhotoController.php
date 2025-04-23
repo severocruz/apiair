@@ -17,7 +17,7 @@ class AccommodationPhotoController extends Controller
     {
         try {
             $accommodationPhotos = AccommodationPhoto::with(relations: ['accommodation'])
-            ->where('status','=','true')->get();
+            ->where('status',true)->get();
             if($accommodationPhotos->isEmpty()){
                 return response()->json(
                     [

@@ -16,7 +16,7 @@ class AccommodationAspectController extends Controller
     {
         try {
             $accommodationAspects = AccommodationAspect::with(relations: ['aspect','accommodation'])
-            ->where('status','=','true')->get();
+            ->where('status',true)->get();
             if($accommodationAspects->isEmpty()){
                 return response()->json(
                     [

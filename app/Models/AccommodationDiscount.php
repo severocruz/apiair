@@ -17,4 +17,10 @@ class AccommodationDiscount extends Model
         'discount_valued',
         'status',
     ];
+
+    protected $casts = [
+        'status' =>'boolean'
+    ];
+
+
 }

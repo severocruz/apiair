@@ -21,6 +21,11 @@ class Reserve extends Model
         'state',
         'status'
     ];
+
+    protected $casts = [
+        'status' =>'boolean'
+    ];
+
     public function accommodation()
     {
         return $this->belongsTo(Accommodation::class, 'accommodation_id');

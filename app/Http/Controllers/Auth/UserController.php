@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Exception;
-use Storage;
 
 class UserController extends Controller
 {
@@ -86,73 +85,64 @@ class UserController extends Controller
 
     public function upload(User $user, Request $request)
     {
-        try {
+        //
+        try{
             $validator = Validator::make($request->all(), [
-                'column' => 'required|string',
+                'column' => 'required',
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ]);
             
             if ($validator->fails()) {
-                return response()->json([
+                $data = [
                     'message' => 'Error en la validación de datos',
                     'errors' => $validator->errors(),
-                    'status' => false
-                ], 400);
+                    'status'  => false
+                ];
+                return response()->json($data, 400);    
             }
-
             // Configuración del disco
             $disk = 'custom_images';
             $directory = 'users'; // Subdirectorio dentro de 'public_html/apisamay/images/'
             $photo = $request->file('image');
+            $photoName = date('Ymd').time().'.'.$photo->extension();
             
-            // Generar nombre único para la imagen
-            $photoName = date('YmdHis').'_'.Str::random(10).'.'.$photo->extension();
+            $photo->move(public_path('images/users'), $photoName);
             
-            // Eliminar imagen anterior si existe
-            if (!empty($user->{$request->column})) {
-                $oldImagePath = $directory.'/'.$user->{$request->column};
-                if (Storage::disk($disk)->exists($oldImagePath)) {
-                    Storage::disk($disk)->delete($oldImagePath);
-                }
+            if(isset($user->toArray()[$request['column']])){
+                $image_path =public_path('images/users')."/".$user->toArray()[$request['column']];
+                if (file_exists($image_path)){
+                    unlink($image_path);
+                }    
             }
-            
-            // Guardar nueva imagen usando el filesystem de Laravel
-            Storage::disk($disk)->putFileAs(
-                $directory,
-                $photo,
-                $photoName
-            );
-            
-            // Actualizar usuario
-            $isUpdated = $user->update([$request->column => $photoName]);
-            
-            if ($isUpdated) {
-                return response()->json([
-                    'data' => User::find($user->id),
-                    'status' => true,
-                    'message' => 'Foto actualizada correctamente',
-                    'url' => Storage::disk($disk)->url($directory.'/'.$photoName) // URL completa
-                ], 200);
-            }
-            
-            return response()->json([
-                'message' => 'No se pudo actualizar el usuario',
-                'errors' => [],
-                'status' => false
-            ], 400);
-            
-        } catch (Exception $e) {
-            Log::error('Error al actualizar la foto: '.$e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-                'user_id' => $user->id ?? null
-            ]);
-            
-            return response()->json([
-                'data' => null,
-                'message' => 'Error interno al procesar la imagen',
-                'status' => false
-            ], 500);
-        }
+             //Storage::putFileAs('public/images/accommodations',$photo,$photoName);
+            $isUpdated = $user->update([$request['column']=>$photoName]);
+             
+            if($isUpdated){
+                $userUpdated = User::find($user->id);
+                $data = ['data'=>$userUpdated,
+                'status'    => true,
+                'message' => 'foto creada'];
+                return response()->json($data,200);
+             } else{
+                $data = [
+                    'message' => 'No se pudo completar la tarea',
+                    'errors' => [],
+                    'status'  => false
+                ];
+                return response()->json($data, 400);
+             }
+          
+            }catch (Exception $e) {
+                
+                Log::error('Error al crear la foto: '.$e->getMessage(),
+            ['trace' => $e->getTraceAsString()]);
+            $data=[ 'data'=>null,
+                    'message' => 'Error al crear la foto',
+                    'status'   => false];
+                return response()->json(
+                    $data, 
+                    500);
+            }	
     }
     public function changePassword(User $user, Request $request)
     {

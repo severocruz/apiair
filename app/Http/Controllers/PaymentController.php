@@ -39,7 +39,7 @@ class PaymentController extends Controller
         $firmaRecibida = $request->header('X-VPAY-Signature');
         $claveSecreta = Config::get('services.vpay.webhook_secret');
         Log::info($claveSecreta);
-        $firmaCalculada = hash_hmac('sha256', $payload, $claveSecreta);
+        $firmaCalculada = hash_hmac('sha256', '', $claveSecreta);
         Log::info($firmaCalculada);
         //
         // Verificar si la firma calculada coincide con la firma recibida

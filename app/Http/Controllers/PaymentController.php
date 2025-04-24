@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
+use Carbon\Carbon;
+use Date;
+use DateTime;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use App\Models\Payment;
@@ -32,13 +35,12 @@ class PaymentController extends Controller
      */
     public function store(StorePaymentRequest $request)
     {
-       
-       
         $payload = $request->getContent();
         $firmaRecibida = $request->header('X-VPAY-Signature');
         $claveSecreta = Config::get('services.vpay.webhook_secret');
-
+        Log::info($claveSecreta);
         $firmaCalculada = hash_hmac('sha256', $payload, $claveSecreta);
+        Log::info($firmaCalculada);
         //
         // Verificar si la firma calculada coincide con la firma recibida
         if (!hash_equals($firmaCalculada, $firmaRecibida)) {
@@ -47,25 +49,29 @@ class PaymentController extends Controller
         }
 
         $payment = new Payment();
-        $payment->reserve_id = $request->input('reserve_id');
-        $payment->mount = $request->input('mount');
-        $payment->method = $request->input('method');
-        $payment->reference = $request->input('reference');
-        $payment->transaction_id = $request->input('transaction_id');
-        $payment->transaction_at = $request->input('transaction_at');
+        $payment->reserve_id = $request->input('codigo');
+        $payment->mount = $request->input('monto');
+        $payment->method = 'VPAY';// $request->input('method');
+        $payment->reference = $request->input(key: 'transaccion');
+        $payment->transaction_id = $request->input('codigo');// $request->input('transaction_id');
+        $payment->transaction_at = Carbon::now(); // Fecha Actual
         $payment->save();
 
-        $reserve = Reserve::find($request->input('reserve_id'));
-        $total = Payment::where('reserve_id', $request->input('reserve_id'))->sum('mount');
-        if ($total >= $reserve->total_price) {
-            $reserve->state = 'Pagado';
-            $reserve->save();
+        $reserve = Reserve::find($payment->reserve_id);
+        if($reserve){
+            $total = Payment::where('reserve_id', $request->input('codigo'))->sum('mount');
+            if ($total >= $reserve->total_price) {
+                $reserve->state = 'Pagado';
+                $reserve->save();
+            }
+        } else {
+            Log::error("Reserva no encontrada para ID: {$payment->reserve_id}");
         }
 
         Log::info('VPAY Webhook recibido con firma válida:', $request->all());
         return response()->json([
-            'message' => 'Payment created successfully',
-            'payment' => $payment
+            'message' => 'OK',
+            'success' => true
         ], 200);
     }
 

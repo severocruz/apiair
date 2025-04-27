@@ -8,9 +8,30 @@ use Illuminate\Http\Request;
 use App\Models\Accommodation;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Storage;
 
 class ExploreController extends Controller{
 
+    public function HandleUploadImagesTest(Request $request){
+        // Validamos que venga un archivo tipo imagen
+        $request->validate([
+            'image' => 'required|image|max:2048', // máximo 2MB
+        ]);
+
+        // Guardamos la imagen en storage/app/public/images
+        if ($request->file('image')) {
+            $path = $request->file('image')->store('images', 'public');
+
+            return response()->json([
+                'message' => 'Imagen subida exitosamente',
+                'path' => Storage::url($path),
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'No se envió ninguna imagen'
+        ], 400);
+    }
     public function HandleGetDescribesAvailables(){
         Log::info("Obteniendo descripciones disponibles");
         try {

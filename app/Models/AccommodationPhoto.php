@@ -27,7 +27,7 @@ class AccommodationPhoto extends Model
 
     public function getUrlAttribute()
     {
-        return url('images/accommodations/'.$this->photo_url);
+        return asset('images/accommodations/'.$this->photo_url);
     }
 
     public function accommodation()

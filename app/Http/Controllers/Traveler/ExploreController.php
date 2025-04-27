@@ -32,6 +32,31 @@ class ExploreController extends Controller{
             'message' => 'No se envió ninguna imagen'
         ], 400);
     }
+
+    public function HandleUploadImagesTest2(Request $request){
+        // Validamos que venga un archivo tipo imagen
+        $request->validate([
+            'image' => 'required|image|max:2048', // máximo 2MB
+        ]);
+
+        // Guardamos la imagen en storage/app/public/images
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $imageName = time().'_'.$image->getClientOriginalName();
+
+            $image->move(public_path('images/test'), $imageName);
+
+            return response()->json([
+                'message' => 'Imagen subida exitosamente',
+                'path' => url('images/test/'.$imageName),
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'No se envió ninguna imagen'
+        ], 400);
+    }
+
     public function HandleGetDescribesAvailables(){
         Log::info("Obteniendo descripciones disponibles");
         try {

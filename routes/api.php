@@ -58,6 +58,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
             Route::get('accommodation/describe/{describe_id}', 'HandleGetAccomodationByDescribe');
             Route::get('describes', 'HandleGetDescribesAvailables');
             Route::post('upload', 'HandleUploadImagesTest');
+            Route::post('upload2', 'HandleUploadImagesTest2');
         });
     });
 

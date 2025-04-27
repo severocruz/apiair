@@ -36,6 +36,7 @@ class User extends Authenticatable
         'status'
     ];
 
+    
     protected $casts = [
         'verified' => 'boolean',
         'status' =>'boolean'

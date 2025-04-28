@@ -35,7 +35,9 @@ return [
         ],
     ],
     'vpay' => [
-    'webhook_secret' => env('VPAY_WEBHOOK_SECRET'),
+        'webhook_secret' => env('VPAY_WEBHOOK_SECRET'),
     ],
-
+    'images' => [
+        'folder' => env('IMAGES_FOLDER'),
+    ],
 ];

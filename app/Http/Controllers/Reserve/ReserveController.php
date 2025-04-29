@@ -218,4 +218,43 @@ class ReserveController extends Controller
         $range[] = $date_end;
         return $range;
     }
+
+    public function update(Request $request, Reserve $reserve)
+    {
+        //
+        try{
+            // $validator = Validator::make($request->all(), [
+            //     'reserve_id' => 'required',
+            // ]);
+
+        //     if ($validator->fails()) {
+        //     //     Log::error('Error al validar el servicio: ',
+        //     // (array)$validator->errors());
+        //     $data = ['message' => 'Error en la validación de datos',
+        //     'errors' => $validator->errors(),
+        //    'status'  => false];
+        //         return response()->json(
+        //             $data, 
+        //             400);
+                    
+        //     }
+            $reserveUpdated = $reserve->update($request->all());
+            $data = ['data'=>$reserveUpdated,
+            'status'    => true,
+            'message' => 'Reserva actualizada'];
+            return response()->json(
+                $data,
+               200);
+            }catch (Exception $e) {
+                
+                Log::error('Error al actualizar la reserva: '.$e->getMessage(),
+            ['trace' => $e->getTraceAsString()]);
+            $data=[ 'data'=>null,
+                    'message' => 'Error al actualizar la reserva',
+                    'status'   => false];
+                return response()->json(
+                    $data, 
+                    500);
+            }	
+    }
 }

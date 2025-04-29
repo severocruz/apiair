@@ -24,6 +24,7 @@ use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Traveler\ExploreController;
 use App\Http\Controllers\Reserve\ReserveController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\EventController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
@@ -184,8 +185,16 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::post('', 'store');
         Route::get('/{accommodationId}/accommodation', 'showByAccommodation');
         Route::get('/{userId}/user', 'showByUser');
+        Route::put('/{reserve}', 'update');
     });
-
+    
+    Route::controller(EventController::class)->prefix('events')->group(function(){
+        // Route::get('', 'index');
+        Route::get('/{id}', 'show');
+        Route::post('', 'store');     
+        Route::get('/{reserveId}', 'getByReserve');
+        Route::put('/{id}', 'update');
+    });
 
 
 });

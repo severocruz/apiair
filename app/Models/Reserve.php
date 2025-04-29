@@ -19,7 +19,9 @@ class Reserve extends Model
         'cash_discount',
         'commission',
         'state',
-        'status'
+        'status',
+        'checkin_date',
+        'checkout_date',
     ];
 
     protected $casts = [

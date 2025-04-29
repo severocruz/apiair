@@ -23,6 +23,7 @@ class Describe extends Model
     ];
     public function getIconAttribute()
     {
-        return url('images/describes/'.$this->id.'.png');
+        $folder = config('services.images.folder');
+        return asset($folder.'/describes/'.$this->id.'.png');
     }
 }

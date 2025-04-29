@@ -87,6 +87,7 @@ class AuthController extends Controller
             $response->email = $user->email;
             $response->tokenType = 'Bearer';
             $response->profile_photo =$user->profile_photo;
+            $response->profile_photo_url = $user->profile_photo_url;
             return response()->json(
                 ['data'=>$response,
                        'status'    => true,

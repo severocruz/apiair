@@ -42,6 +42,33 @@ class User extends Authenticatable
         'status' =>'boolean'
     ];
 
+    protected $appends = [
+        'profile_photo_url',
+        'confirm_photo_url',
+        'document_photo_front_url',
+        'document_photo_back_url'
+    ];
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        return $this->profile_photo ? asset(config('services.images.folder') . '/users/' . $this->profile_photo) : null;
+    }
+
+    public function getConfirmPhotoUrlAttribute()
+    {
+        return $this->confirm_photo ? asset(config('services.images.folder') . '/users/' . $this->confirm_photo) : null;
+    }
+
+    public function getDocumentPhotoFrontUrlAttribute()
+    {
+        return $this->document_photo_front ? asset(config('services.images.folder') . '/users/' . $this->document_photo_front) : null;
+    }
+
+    public function getDocumentPhotoBackUrlAttribute()
+    {
+        return $this->document_photo_back ? asset(config('services.images.folder') . '/users/' . $this->document_photo_back) : null;
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

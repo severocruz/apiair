@@ -47,7 +47,7 @@ Route::controller(AuthController::class)
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::controller(PaymentController::class)->group(function(){
         Route::prefix('payment')->group(function (){
-            Route::post('/generate/{idReserva}', 'HandleGeneratePaymentUrl');
+            Route::get('/generate/{idReserva}', 'HandleGeneratePaymentUrl');
         });
     });
 

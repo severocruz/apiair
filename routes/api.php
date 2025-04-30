@@ -32,7 +32,7 @@ use App\Http\Controllers\EventController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/verification', [AuthController::class, 'sendVerificationEmail'])->name('verification');
- Route::post('/payload', [PaymentController::class, 'store'])->name('stores');
+Route::post('/payload', [PaymentController::class, 'store'])->name('stores');
 
 Route::controller(AuthController::class)
 ->middleware('auth:sanctum')->prefix('auth')
@@ -45,6 +45,12 @@ Route::controller(AuthController::class)
 
 
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
+    Route::controller(PaymentController::class)->group(function(){
+        Route::prefix('payment')->group(function (){
+            Route::post('/generate/{idReserva}', 'HandleGeneratePaymentUrl');
+        });
+    });
+
     Route::controller(ServiceController::class)->group(function () {
         Route::get('/services', 'index');
         Route::get('/services/{id}', 'show');

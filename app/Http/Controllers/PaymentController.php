@@ -7,13 +7,66 @@ use App\Http\Requests\UpdatePaymentRequest;
 use Carbon\Carbon;
 use Date;
 use DateTime;
+use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use App\Models\Payment;
 use App\Models\Reserve;
+use App\Helpers\PaymentUrl;
+use InvalidArgumentException;
 
 class PaymentController extends Controller
 {
+    public function HandleGeneratePaymentUrl($idReserva)
+    {
+        Log::info("Iniciando generación de la URL de pago");
+
+        try {
+            // 1. Validar que exista la reserva
+            $reserve = Reserve::find($idReserva);
+            if (!$reserve) {
+                return response()->json([
+                    'data' => null,
+                    'message' => 'No existe la reserva',
+                    'status' => false
+                ], 404);
+            }
+
+            $monto = number_format($reserve->total_price, 2, '.', ''); // produce "1.00" (string)
+            $monto = (float) $monto; // convierte "1.00" (string) → 1.0 (float)
+            // 2. Preparar datos para el pago
+            $data = [
+                'companyId' => '95',
+                'codigo'    => $reserve->id,
+                'monto'     => $monto
+            ];
+
+            Log::info("Datos para el pago:", $data);
+            // 3. Generar URL de pago
+            $paymentUrl = PaymentUrl::url($data);
+            // 4. Retornar respuesta exitosa
+            return response()->json([
+                'data' => $paymentUrl,
+                'message' => 'URL de pago generada con éxito',
+                'status' => true
+            ]);
+
+        } catch (InvalidArgumentException $e) {
+            Log::error('Datos inválidos para pago: ' . $e->getMessage());
+            return response()->json([
+                'data' => null,
+                'message' => 'Datos inválidos para pago: ' . $e->getMessage(),
+                'status' => false
+            ], 400);
+        } catch (Exception $e) {
+            Log::error("Error al generar la URL de pago: " . $e->getMessage());
+            return response()->json([
+                'data' => null,
+                'message' => 'Error al generar la URL de pago: ' . $e->getMessage(),
+                'status' => false
+            ], 500);
+        }
+    }
     /**
      * Display a listing of the resource.
      */

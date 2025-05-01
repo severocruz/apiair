@@ -45,26 +45,26 @@ class EventController extends Controller
             $validator = Validator::make($request->all(), [
                 'reserve_id' => 'required|integer',
                 'type' => 'required|string',
-                'event_date' => 'required|date',
+                'event_date' => 'nullable|date',
                 'note' => 'nullable|string',
                 'photo_url' => 'nullable|string',
-                'status' => 'required|boolean'
+                // 'status' => 'required|boolean'
             ]);
 
             if ($validator->fails()) {
                 return response()->json([
                     'data' => null,
-                    'message' => $validator->errors(),
+                    'message' => "Errores en la validación",//$validator->errors(),
                     'status' => false
                 ], 422);
             }
 
             $event = Event::create($request->all());
-            if($event->type == 'checkin'){
+            if($event->type == 'Checkin'){
                 $reserve = Reserve::find($event->reserve_id);
                 $reserve->update(['state' => "Ocupando"]);
             }
-            if($event->type == 'checkout'){
+            if($event->type == 'Checkout'){
                 $reserve = Reserve::find($event->reserve_id);
                 $reserve->update(['state' => "Finalizado"]);
             }
@@ -74,7 +74,7 @@ class EventController extends Controller
                 'data' => $event,
                 'message' => 'Evento creado exitosamente',
                 'status' => true
-            ], 201);
+            ], 200);
         } catch (Exception $e) {
             Log::error('Error al crear el Evento: ' . $e->getMessage());
             return response()->json([
@@ -118,12 +118,12 @@ class EventController extends Controller
             $event = Event::where('reserve_id', $reserveId)
                             ->get();
 
-            if (!$event) {
+            if ($event->isEmpty() ) {
                 return response()->json([
                     'data' => [],
                     'message' => 'Eventos no encontrados',
-                    'status' => false
-                ], 404);
+                    'status' => true
+                ], 200);
             }
 
             return response()->json([

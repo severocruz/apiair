@@ -192,7 +192,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         // Route::get('', 'index');
         Route::get('/{id}', 'show');
         Route::post('', 'store');     
-        Route::get('/{reserveId}', 'getByReserve');
+        Route::get('/{reserveId}/reserve', 'getByReserve');
         Route::put('/{id}', 'update');
     });
 

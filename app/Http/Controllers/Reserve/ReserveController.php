@@ -78,6 +78,7 @@ class ReserveController extends Controller
 
     public function store(Request $request)
     {
+        Log::info($request);
         try{
             $validator = Validator::make($request->all(), [
                 'accommodation_id' => 'required',
@@ -100,7 +101,9 @@ class ReserveController extends Controller
                     400);
                     
             }
+            
             $reserve = Reserve::create($request->all());
+            
             $rango = $this->getRangeDate($request['start_date'], $request['end_date'], 'Y-m-d');
             $reserve_id = $reserve->id;
             $reserveSend = Reserve::with(relations: ['accommodation','user'])->findOrFail($reserve_id);
@@ -170,12 +173,14 @@ class ReserveController extends Controller
         try {
             $fecha_actual = date("Y-m-d");
             $fechaAyer=date("Y-m-d",strtotime($fecha_actual."- 1 days"));
+            Log::info($fechaAyer);
             $accommodationReserves = Reserve::orderByDesc('id')
                                        ->with(['accommodation'])
                                        ->where('user_id','=',$userId)
-                                       ->where('status','=',true)
+                                       ->where('status',true)
                                        ->where('end_date','>',$fechaAyer)
                                        ->get();
+            Log::info("Reserva");
             if($accommodationReserves->isEmpty()){
                 return response()->json(
                     [

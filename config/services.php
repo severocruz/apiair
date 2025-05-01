@@ -40,4 +40,5 @@ return [
     'images' => [
         'folder' => env('IMAGES_FOLDER'),
     ],
+    'vpay_api' => env('VPAY_API')
 ];

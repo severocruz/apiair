@@ -260,6 +260,83 @@ class AccommodationController extends Controller
             }	
     }
 
+    public function filter2(Request $request)
+    {
+        Log::info("Datos del request:", $request->all());
+        
+        try {
+            $typeId = $request->input('type_id', 0);
+            $priceRange1 = $request->input('price_range1', 0);
+            $priceRange2 = $request->input('price_range2', 0);
+            $services = $request->input('services', []);
+            $rooms = $request->input('rooms', 0);
+            $beds = $request->input('beds', 0);
+            $bathrooms = $request->input('bathrooms', 0);
+
+            $query = Accommodation::with(relations: ['type', 'describe', 'aspects', 'services', 'prices', 'photos'])
+                ->where('status', true)
+                ->where('published', true);
+
+            // Filtro por tipo de alojamiento
+            if ($typeId != 0) {
+                $query->where('type_id', $typeId);
+            }
+
+            // Filtro por rango de precios
+            if ($priceRange2 != 0) {
+                $query->whereHas('prices', function($q) use ($priceRange1, $priceRange2) {
+                    $q->whereBetween('price_night', [$priceRange1, $priceRange2]);
+                });
+            }
+
+            // Filtro por número de habitaciones
+            if ($rooms != 0) {
+                $query->where('number_rooms', $rooms);
+            }
+
+            // Filtro por número de camas
+            if ($beds != 0) {
+                $query->where('number_beds', $beds);
+            }
+
+            // Filtro por número de baños
+            if ($bathrooms != 0) {
+                $query->where('number_bathrooms', $bathrooms);
+            }
+
+            // Filtro por servicios
+            if (!empty($services)) {
+                $query->whereHas('services', function($q) use ($services) {
+                    $q->whereIn('service_id', $services);
+                }, '=', count($services));
+            }
+
+            $datafiltered = $query->get();
+
+            if ($datafiltered->isEmpty()) {
+                return response()->json([
+                    'data' => [],
+                    'message' => 'No se encuntraron anuncios para esta búsqueda.',
+                    'status' => false
+                ], 200);
+            }
+
+            return response()->json([
+                'data' => $datafiltered,
+                'status' => true,
+                'message' => 'Alojamientos encontrados'
+            ], 200);
+
+        } catch (Exception $e) {
+            Log::error('Error al obtener los anuncios: '.$e->getMessage());
+            return response()->json([
+                'data' => [],
+                'message' => 'Error al obtener los anuncios',
+                'status' => false
+            ], 500);
+        }
+    }
+
     public function filter(Request $request)
     {
         Log::info("Datos del request:", $request->all());

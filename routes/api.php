@@ -83,6 +83,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::put('/{accommodation}', 'update');
         Route::delete('/{id}', 'delete');
         Route::post('/filter', 'filter');
+        Route::post('/filter2', 'filter2');
     });
 
     Route::controller(AccommodationServiceController::class)->prefix('accommodation_services')->group(function(){

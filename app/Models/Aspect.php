@@ -25,7 +25,8 @@ class Aspect extends Model
 
     public function getIconAttribute()
     {
-        return url('images/aspects/'.$this->description.'.png');
+        $folder = config('services.images.folder');
+        return asset($folder.'/aspects/'.$this->description.'.png');
     }
     public function describe()
     {

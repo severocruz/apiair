@@ -24,6 +24,7 @@ class Service extends Model
     ];
     public function getIconAttribute()
     {
-        return url('images/services/'.$this->id.'.png');
+        $folder = config('services.images.folder');
+        return asset($folder.'/services/'.$this->id.'.png');
     }
 }

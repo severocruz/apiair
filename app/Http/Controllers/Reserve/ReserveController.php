@@ -52,6 +52,8 @@ class ReserveController extends Controller
                 ->where('status', true)
                 ->first();
 
+            Log::info($reserva);
+            
             if (!$reserva) {  // Verifica si es null directamente
                 return response()->json([
                     'data' => null,

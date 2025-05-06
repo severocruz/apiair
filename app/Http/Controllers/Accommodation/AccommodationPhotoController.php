@@ -145,6 +145,7 @@ class AccommodationPhotoController extends Controller
             $photo = $request->file('image');
             $photoName = date('Ymd').time().'.'.$photo->extension();
             $photo->move(public_path('images/accommodations'), $photoName);
+            Log::info('Subiendo imagen a: '.public_path('images/accommodations'));
              //Storage::putFileAs('public/images/accommodations',$photo,$photoName);
             $accommodationPhoto = new AccommodationPhoto();
             $accommodationPhoto->accommodation_id = $request->accommodation_id;

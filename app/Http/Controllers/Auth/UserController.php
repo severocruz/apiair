@@ -101,10 +101,10 @@ class UserController extends Controller
                 return response()->json($data, 400);
             }
 
-            $folder = config('services.images.folder');
+            $folder = config('services.images_user.folder');
             // Definir carpeta destino manualmente (evitar problemas de public_path en hosting)
             // $targetPath = $_SERVER['DOCUMENT_ROOT'] . '/images/users/';
-            $targetPath = $_SERVER['DOCUMENT_ROOT'].'/'.$folder .'/users/';
+            $targetPath = $_SERVER['DOCUMENT_ROOT'].$folder .'/users/';
             Log::info('Carpeta destino: ' . $targetPath);
             // $otraRuta = $_SERVER['DOCUMENT_ROOT'].$folder.'/images/users/';
             // Log::info('Carpeta destino: ' . $otraRuta);

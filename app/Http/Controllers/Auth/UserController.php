@@ -101,8 +101,9 @@ class UserController extends Controller
                 return response()->json($data, 400);
             }
 
+            $folder = config('services.images.folder');
             // Definir carpeta destino manualmente (evitar problemas de public_path en hosting)
-            $targetPath = $_SERVER['DOCUMENT_ROOT'] . '/images/users/';
+            $targetPath = $_SERVER['DOCUMENT_ROOT'] .$folder.'/users/';
 
             // Asegurar que la carpeta exista
             if (!file_exists($targetPath)) {

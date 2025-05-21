@@ -38,6 +38,7 @@ Route::controller(AuthController::class)
 ->middleware('auth:sanctum')->prefix('auth')
 ->group(function () {
     Route::post('/logout', 'logout');
+    Route::post('/unsubscrive', 'unSubscribe');
 });
 // Route::middleware('auth:sanctum')->group(function () {
 //     Route::post('/logout', [AuthController::class, 'logout']);

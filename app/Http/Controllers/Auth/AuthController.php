@@ -78,7 +78,8 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             // $user = Auth::user();
-            $user = User::where('email', $request->email)->firstOrFail();
+            $user = User::where('email', $request->email)
+                        ->where('status',1) ->firstOrFail();
             $token = $user->createToken('auth_token')->plainTextToken;
             $response = new stdClass();
             $response->id = $user->id;
@@ -198,6 +199,26 @@ class AuthController extends Controller
             Log::error('Error al verificar código: ' . $e->getMessage());
             return response()->json(
                 ['message' => 'Error al verificar código',
+                    'status' => false],
+                500
+            );
+        }
+    }
+    public function unSubscribe(Request $request)
+    {
+        try {
+            $user = User::where('email', $request->email)->firstOrFail();
+            $user->update(['status' => 0]);
+            return response()->json(
+                [
+                    'message' => 'Usted ya no se encuentra suscrito a SAMAY',
+                    'status' => true],
+                200
+            );
+        } catch (Exception $e) {
+            Log::error('Error al desuscribir usuario: ' . $e->getMessage());
+            return response()->json(
+                ['message' => 'Error al desuscribir usuario',
                     'status' => false],
                 500
             );

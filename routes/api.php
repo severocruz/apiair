@@ -33,6 +33,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/verification', [AuthController::class, 'sendVerificationEmail'])->name('verification');
 Route::post('/payload', [PaymentController::class, 'store'])->name('stores');
+Route::post('/verificate', [AuthController::class, 'verificate'])->name('verificate');
 
 Route::controller(AuthController::class)
 ->middleware('auth:sanctum')->prefix('auth')

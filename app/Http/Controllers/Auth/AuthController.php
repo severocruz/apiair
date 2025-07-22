@@ -3,19 +3,105 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\VerificationCode;
 use App\Mail\EmailVerification;
 use stdClass;
+use Str;
 
 class AuthController extends Controller
 {
+    public function resetPassword(Request $request)
+    {
+        
+        $request->validate([
+            'email' => 'required|email',
+            'token' => 'required',
+            'password' => 'required|string|min:6',
+        ]);
+
+        $reset = DB::table('password_reset_tokens')
+            ->where('email', $request['email'])
+            ->where('token', $request['token'])
+            ->first();
+
+        if (!$reset) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Token inválido'
+            ], 400);
+        
+        }
+
+        $user = User::where('email', $request['email'])->first();
+        if(!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Usuario no encontrado'
+            ], 404);
+        }
+
+        $user->password = bcrypt($request['password']);
+        $user->save();
+
+        // Eliminar el token usado
+        DB::table('password_reset_tokens')->where('email', $request['email'])->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'Contraseña restablecida con éxito'
+        ], 200);
+    }
+
+    public function sendResetLinkEmail(Request $request){
+        // Validar el email
+        $request->validate(['email' => 'required|email']);
+
+        $user = User::where('email', $request['email'])->first();
+        if (!$user) {
+            return response()->json(
+                [
+                    'message' => 'El usuario no existe',
+                    'status' => false,
+                ], 404);
+        }
+
+        // Generar token
+        $token = Str::random(60);
+        // Guardar en password_resets
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $request['email']],
+            [
+                'email' => $request['email'],
+                'token' => $token,
+                'created_at' => \Illuminate\Support\Carbon::now()
+            ]
+        );
+        
+        $frontendUrl = env('FRONTEND_URL', 'https://samaybolivia.com').'/reset-password.php'; // Cambia por la URL de tu frontend
+        $link = $frontendUrl . '?token=' . $token . '&email=' . urlencode($request['email']);
+
+        // Enviar correo (puedes personalizar el Mailable)
+        Mail::raw("Haz clic en el siguiente enlace para restablecer tu contraseña: $link", function($message) use ($request) {
+            $message->to($request['email'])
+                    ->subject('Recuperación de contraseña');
+        });
+
+        return response()->json(
+            [
+                'status' => true,
+                'data' => ['Correo de recuperación enviado'],
+                'message' => 'Enlace de restablecimiento de contraseña enviado',
+            ], 200);
+    }
     //
     public function register(Request $request)
     {
